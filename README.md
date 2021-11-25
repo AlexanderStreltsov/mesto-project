@@ -12,4 +12,4 @@
 В проекте попап по умолчанию закрыт, для включения нужно добавить модификатор popup_opened в секцию popup.
 
 ### Ссылка на проект
-[Сайт "Mesto"](https://alexanderstreltsov.github.io/mesto/)
+[Сайт "Mesto"](https://alexanderstreltsov.github.io/mesto-project/)
