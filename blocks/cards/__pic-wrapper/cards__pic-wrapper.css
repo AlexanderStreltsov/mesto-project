@@ -1,0 +1,7 @@
+.cards__pic-wrapper {
+  width: 100%;
+  max-height: 282px;
+  border-top-right-radius: inherit;
+  border-top-left-radius: inherit;
+  overflow: hidden;
+}

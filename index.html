@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mesto</title>
+  <link rel="icon" href="./images/favicon.png">
+  <link rel="stylesheet" href="./pages/index.css">
+</head>
+<body class="common">
+  <div class="page">
+    <header class="header">
+      <div class="header__logo"></div>
+    </header>
+    <main class="content">
+      <section class="profile">
+        <div class="profile__information-section">
+          <div class="profile__avatar"></div>
+          <div class="profile__info">
+            <div class="profile__name-wrapper">
+              <h1 class="profile__title">Жак-Ив Кусто</h1>
+              <button class="profile__edit-button"></button>
+            </div>
+            <p class="profile__subtitle">Исследователь океана</p>
+          </div>
+        </div>
+        <button class="profile__add-button"></button>
+      </section>
+      <section class="popup">
+        <div class="popup__container">
+          <button class="popup__close-button"></button>
+          <form class="form">
+            <h2 class="form__heading">Редактировать профиль</h2>
+            <fieldset class="form__input-container">
+              <input type="text" class="form__item" name="title" value="Жак-Ив Кусто">
+              <input type="text" class="form__item" name="subtitle" value="Исследователь океана">
+            </fieldset>
+            <fieldset class="form__handlers">
+              <input type="submit" class="form__button" value="Сохранить">
+            </fieldset>
+          </form>
+        </div>
+      </section>
+      <section class="cards">
+        <ul class="cards__list">
+          <li class="cards__list-item">
+            <div class="cards__pic-wrapper">
+              <img src="./images/place-karachaevsk.jpg" class="cards__picture" alt="Карачаевск">
+            </div>
+            <div class="cards__desc">
+              <h2 class="cards__title">Карачаевск</h2>
+              <button class="cards__like-button"></button>
+            </div>
+          </li>
+          <li class="cards__list-item">
+            <div class="cards__pic-wrapper">
+              <img src="./images/place-elbrus.jpg" class="cards__picture" alt="Гора Эльбрус">
+            </div>
+            <div class="cards__desc">
+              <h2 class="cards__title">Гора Эльбрус</h2>
+              <button class="cards__like-button cards__like-button_active"></button>
+            </div>
+          </li>
+          <li class="cards__list-item">
+            <div class="cards__pic-wrapper">
+              <img src="./images/place-dombai.jpg" class="cards__picture" alt="Домбай">
+            </div>
+            <div class="cards__desc">
+              <h2 class="cards__title">Домбай</h2>
+              <button class="cards__like-button"></button>
+            </div>
+          </li>
+          <li class="cards__list-item">
+            <div class="cards__pic-wrapper">
+              <img src="./images/place-elbrus.jpg" class="cards__picture" alt="Гора Эльбрус">
+            </div>
+            <div class="cards__desc">
+              <h2 class="cards__title">Гора Эльбрус</h2>
+              <button class="cards__like-button cards__like-button_active"></button>
+            </div>
+          </li>
+          <li class="cards__list-item">
+            <div class="cards__pic-wrapper">
+              <img src="./images/place-dombai.jpg" class="cards__picture" alt="Домбай">
+            </div>
+            <div class="cards__desc">
+              <h2 class="cards__title">Домбай</h2>
+              <button class="cards__like-button"></button>
+            </div>
+          </li>
+          <li class="cards__list-item">
+            <div class="cards__pic-wrapper">
+              <img src="./images/place-karachaevsk.jpg" class="cards__picture" alt="Карачаево-Черкесия">
+            </div>
+            <div class="cards__desc">
+              <h2 class="cards__title">Карачаево-Черкесия</h2>
+              <button class="cards__like-button"></button>
+            </div>
+          </li>
+        </ul>
+      </section>
+    </main>
+    <footer class="footer">
+      <p class="footer__copyright">© 2021 Mesto Russia</p>
+    </footer>
+  </div>
+</body>
+</html>
