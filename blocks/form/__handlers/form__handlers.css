@@ -1,5 +1,5 @@
 .form__handlers {
-  margin: 46px 0 0;
+  margin: 48px 0 0;
   padding: 0;
   border: 0;
   width: 100%;
@@ -9,6 +9,6 @@
 
 @media screen and (max-width: 767px) {
   .form__handlers {
-    margin-top: 44px;
+    margin-top: 45px;
   }
 }

@@ -1,11 +1,12 @@
 .form {
   display: flex;
   flex-direction: column;
-  padding: 34px 36px 37px;
+  box-sizing: border-box;
+  padding: 48px 36px 37px;
 }
 
 @media screen and (max-width: 767px) {
   .form {
-    padding: 25px 22px;
+    padding: 75px 22px 25px;
   }
 }
