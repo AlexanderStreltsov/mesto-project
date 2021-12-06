@@ -77,14 +77,14 @@
       <p class="footer__copyright">© 2021 Mesto Russia</p>
     </footer>
   </div>
-  <section class="popup">
+  <section id="edit-popup" class="popup">
     <div class="popup__container">
       <h2 class="popup__heading">Редактировать профиль</h2>
       <button type="button" class="popup__close-button"></button>
       <form class="form" name="edit-form">
         <fieldset class="form__input-container">
-          <input type="text" class="form__item" name="title" value="Жак-Ив Кусто">
-          <input type="text" class="form__item" name="subtitle" value="Исследователь океана">
+          <input type="text" id="title" class="form__item" name="title" placeholder="Имя">
+          <input type="text" id="subtitle" class="form__item" name="subtitle" placeholder="Работа">
         </fieldset>
         <fieldset class="form__handlers">
           <button type="submit" class="form__button">Сохранить</button>
@@ -92,5 +92,21 @@
       </form>
     </div>
   </section>
+  <section id="add-popup" class="popup">
+    <div class="popup__container">
+      <h2 class="popup__heading">Новое место</h2>
+      <button type="button" class="popup__close-button"></button>
+      <form class="form" name="add-cards">
+        <fieldset class="form__input-container">
+          <input type="text" id="name-card" class="form__item" name="name-card" placeholder="Название">
+          <input type="text" id="url-img-card" class="form__item" name="url-img-card" placeholder="Ссылка на картинку">
+        </fieldset>
+        <fieldset class="form__handlers">
+          <button type="submit" class="form__button">Создать</button>
+        </fieldset>
+      </form>
+    </div>
+  </section>
+  <script src="./js/script.js"></script>
 </body>
 </html>
