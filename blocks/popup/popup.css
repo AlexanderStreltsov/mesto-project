@@ -5,7 +5,10 @@
   position: fixed;
   top: 0;
   left: 0;
-  display: none;
+  display: flex;
   justify-content: center;
   align-items: center;
+  visibility: hidden;
+  opacity: .3;
+  transition: opacity .3s linear, visibility .3s linear;
 }
