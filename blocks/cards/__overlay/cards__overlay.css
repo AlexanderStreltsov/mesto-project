@@ -1,0 +1,19 @@
+.cards__overlay {
+  height: 282px;
+  border-top-right-radius: inherit;
+  border-top-left-radius: inherit;
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+}
+
+.cards__overlay::before {
+  content: '';
+  height: 100%;
+  width: 100%;
+  background-color: #000;
+  opacity: .4;
+  position: absolute;
+  top: 0;
+  left: 0;
+}

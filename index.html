@@ -19,58 +19,15 @@
           <div class="profile__info">
             <div class="profile__name-wrapper">
               <h1 class="profile__title">Жак-Ив Кусто</h1>
-              <button class="profile__edit-button" type="button"></button>
+              <button class="profile__edit-button action-open" type="button"></button>
             </div>
             <p class="profile__subtitle">Исследователь океана</p>
           </div>
         </div>
-        <button class="profile__add-button" type="button"></button>
+        <button class="profile__add-button action-open" type="button"></button>
       </section>
       <section class="cards">
-        <ul class="cards__list">
-          <li class="cards__list-item">
-            <img src="./images/place-karachaevsk.jpg" class="cards__picture" alt="Карачаевск">
-            <div class="cards__desc">
-              <h2 class="cards__title">Карачаевск</h2>
-              <button class="cards__like-button" type="button"></button>
-            </div>
-          </li>
-          <li class="cards__list-item">
-            <img src="./images/place-elbrus.jpg" class="cards__picture" alt="Гора Эльбрус">
-            <div class="cards__desc">
-              <h2 class="cards__title">Гора Эльбрус</h2>
-              <button class="cards__like-button cards__like-button_active" type="button"></button>
-            </div>
-          </li>
-          <li class="cards__list-item">
-            <img src="./images/place-dombai.jpg" class="cards__picture" alt="Домбай">
-            <div class="cards__desc">
-              <h2 class="cards__title">Домбай</h2>
-              <button class="cards__like-button" type="button"></button>
-            </div>
-          </li>
-          <li class="cards__list-item">
-            <img src="./images/place-elbrus.jpg" class="cards__picture" alt="Гора Эльбрус">
-            <div class="cards__desc">
-              <h2 class="cards__title">Гора Эльбрус</h2>
-              <button class="cards__like-button cards__like-button_active" type="button"></button>
-            </div>
-          </li>
-          <li class="cards__list-item">
-            <img src="./images/place-dombai.jpg" class="cards__picture" alt="Домбай">
-            <div class="cards__desc">
-              <h2 class="cards__title">Домбай</h2>
-              <button class="cards__like-button" type="button"></button>
-            </div>
-          </li>
-          <li class="cards__list-item">
-            <img src="./images/place-karachaevsk.jpg" class="cards__picture" alt="Карачаево-Черкесия">
-            <div class="cards__desc">
-              <h2 class="cards__title">Карачаево-Черкесия</h2>
-              <button class="cards__like-button" type="button"></button>
-            </div>
-          </li>
-        </ul>
+        <ul class="cards__list"></ul>
       </section>
     </main>
     <footer class="footer">
@@ -83,8 +40,8 @@
       <button type="button" class="popup__close-button"></button>
       <form class="form" name="edit-form">
         <fieldset class="form__input-container">
-          <input type="text" id="title" class="form__item" name="title" placeholder="Имя">
-          <input type="text" id="subtitle" class="form__item" name="subtitle" placeholder="Работа">
+          <input type="text" id="title" class="form__item" name="title" required placeholder="Имя">
+          <input type="text" id="subtitle" class="form__item" name="subtitle" required placeholder="Работа">
         </fieldset>
         <fieldset class="form__handlers">
           <button type="submit" class="form__button">Сохранить</button>
@@ -98,8 +55,8 @@
       <button type="button" class="popup__close-button"></button>
       <form class="form" name="add-cards">
         <fieldset class="form__input-container">
-          <input type="text" id="name-card" class="form__item" name="name-card" placeholder="Название">
-          <input type="text" id="url-img-card" class="form__item" name="url-img-card" placeholder="Ссылка на картинку">
+          <input type="text" id="name-card" class="form__item" name="name-card" required placeholder="Название">
+          <input type="text" id="link-img-card" class="form__item" name="link-img-card" required placeholder="Ссылка на картинку">
         </fieldset>
         <fieldset class="form__handlers">
           <button type="submit" class="form__button">Создать</button>
@@ -107,6 +64,29 @@
       </form>
     </div>
   </section>
+  <section id="image-viewer-popup" class="popup">
+    <div class="popup__container popup__container_content_image-viewer">
+      <button type="button" class="popup__close-button"></button>
+    </div>
+  </section>
+  <template id="card-template">
+    <li class="cards__list-item">
+      <div class="cards__overlay action-open">
+        <img src="" class="cards__picture" alt="">
+      </div>
+      <button class="cards__delete-button" type="button"></button>
+      <div class="cards__desc">
+        <h2 class="cards__title"></h2>
+        <button class="cards__like-button" type="button"></button>
+      </div>
+    </li>
+  </template>
+  <template id="image-viewer-template">
+    <figure class="image-viewer__figure">
+      <img src="" class="image-viewer__picture" alt="">
+      <figcaption class="image-viewer__caption"></figcaption>
+    </figure>
+  </template>
   <script src="./js/script.js"></script>
 </body>
 </html>

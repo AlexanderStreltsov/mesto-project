@@ -9,7 +9,7 @@
   background-size: 22px 22px;
   background-repeat: no-repeat;
   background-position: center;
-  transition: opacity 0.3s linear;
+  transition: opacity .3s linear;
   border: 1px solid #fff;
   box-sizing: border-box;
   border-radius: 2px;
