@@ -19,12 +19,12 @@
           <div class="profile__info">
             <div class="profile__name-wrapper">
               <h1 class="profile__title">Жак-Ив Кусто</h1>
-              <button class="profile__edit-button action-open" type="button"></button>
+              <button class="profile__edit-button" type="button"></button>
             </div>
             <p class="profile__subtitle">Исследователь океана</p>
           </div>
         </div>
-        <button class="profile__add-button action-open" type="button"></button>
+        <button class="profile__add-button" type="button"></button>
       </section>
       <section class="cards">
         <ul class="cards__list"></ul>
@@ -67,16 +67,15 @@
   <section id="image-viewer-popup" class="popup">
     <div class="popup__container popup__container_content_image-viewer">
       <button type="button" class="popup__close-button"></button>
+      <figure class="image-viewer__figure">
+        <img src="https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg" class="image-viewer__picture" alt="Описание">
+        <figcaption class="image-viewer__caption"></figcaption>
+      </figure>
     </div>
   </section>
   <template id="card-template">
     <li class="cards__list-item">
-      <!--
-        Добавил затемнение для изображений карточек cards__overlay в списке.
-        Без "покрывала" кнопка удаления плохо видна на фоне некоторых изображений.
-        В прототипе Figma стилей не было, сделал примерно как на видео в ФТ к проекту.
-      -->
-      <div class="cards__overlay action-open">
+      <div class="cards__overlay">
         <img src="" class="cards__picture" alt="">
       </div>
       <button class="cards__delete-button" type="button"></button>
@@ -85,12 +84,6 @@
         <button class="cards__like-button" type="button"></button>
       </div>
     </li>
-  </template>
-  <template id="image-viewer-template">
-    <figure class="image-viewer__figure">
-      <img src="" class="image-viewer__picture" alt="">
-      <figcaption class="image-viewer__caption"></figcaption>
-    </figure>
   </template>
   <script src="./js/script.js"></script>
 </body>
