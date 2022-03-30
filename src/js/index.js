@@ -1,3 +1,5 @@
+import '../pages/index.css';
+
 const initialCards = [
   {
     name: 'Архыз',
