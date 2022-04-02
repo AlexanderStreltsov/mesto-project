@@ -42,24 +42,20 @@ const openImageCardViewer = (element, config) => {
 }
 
 const setActionCardHandlers = (evt, config) => {
-  const element = evt.target;
-  switch (element.classList[0]) {
+  const cardElement = evt.target;
+  switch (cardElement.classList[0]) {
     case config.imageOverlayClass:
-      openImageCardViewer(element, config);
+      openImageCardViewer(cardElement, config);
       break;
     case config.likeClass:
-      element.classList.toggle(config.likeActiveClass);
+      cardElement.classList.toggle(config.likeActiveClass);
       break;
     case config.deleteClass:
-      element.parentElement.remove();
+      cardElement.parentElement.remove();
       break;
     default:
       break;
   }
 }
 
-export {
-  createCard,
-  addCard,
-  setActionCardHandlers
-}
+export { createCard, addCard, setActionCardHandlers };

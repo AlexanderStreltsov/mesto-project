@@ -1,8 +1,14 @@
 .form__input-container {
+  margin: 33px 0 0;
+  position: relative;
+}
+
+.form__input-container:first-child {
   margin: 0;
-  padding: 0;
-  border: 0;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
+}
+
+@media screen and (max-width: 767px) {
+  .form__input-container {
+    margin-top: 30px;
+  }
 }

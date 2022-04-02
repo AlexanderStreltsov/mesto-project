@@ -9,9 +9,13 @@
   background-image: url('../../../images/like-button.svg');
   background-size: contain;
   background-repeat: no-repeat;
-  transition: opacity .3s linear;
+  transition: all .3s linear;
 }
 
 .cards__like-button:hover {
   opacity: .5;
+}
+
+.cards__like-button:active {
+  transform: scale(.8);
 }

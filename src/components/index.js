@@ -1,5 +1,6 @@
 import '../pages/index.css';
 import { openPopup, closePopup } from './modal.js';
+import { enableValidation, toogleButtonState } from './validate';
 import { createCard, addCard, setActionCardHandlers } from './card.js';
 import {
   initialCards,
@@ -16,7 +17,8 @@ import {
   popupAddCard,
   cardForm,
   cardNameInput,
-  cardLinkInput
+  cardLinkInput,
+  validationConfig
 } from './constants.js';
 
 const submitProfileHandler = (evt) => {
@@ -36,12 +38,14 @@ const submitCardHandler = (evt) => {
 const editProfileHandler = () => {
   profileNameInput.value = currentName.textContent;
   profileJobInput.value = currentJob.textContent;
+  toogleButtonState(profilePopup, [profileNameInput, profileJobInput], validationConfig);
   openPopup(profilePopup);
 }
 
 const addCardHandler = () => {
   cardNameInput.value = '';
   cardLinkInput.value = '';
+  toogleButtonState(popupAddCard, [cardNameInput, cardLinkInput], validationConfig);
   openPopup(popupAddCard);
 }
 
@@ -55,3 +59,4 @@ profileForm.addEventListener("submit", submitProfileHandler);
 cardForm.addEventListener("submit", submitCardHandler);
 
 addCard('appendSomeCards', initCardsElements);
+enableValidation(validationConfig);

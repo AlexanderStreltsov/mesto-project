@@ -45,7 +45,7 @@ const profileEditButton = document.querySelector('.profile__edit-button');
 const profilePopup = document.querySelector('#edit-popup');
 const profileForm = profilePopup.querySelector('.form');
 const profileNameInput = profilePopup.querySelector('#title');
-const profileJobInput = profilePopup.querySelector('#subtitle');
+const profileJobInput = profilePopup.querySelector('#job');
 
 const cardsContainer = document.querySelector('.cards__list');
 const cardAddButton = document.querySelector('.profile__add-button');
@@ -53,6 +53,17 @@ const popupAddCard = document.querySelector('#add-popup');
 const cardForm = popupAddCard.querySelector('.form');
 const cardNameInput = popupAddCard.querySelector('#name-card');
 const cardLinkInput = popupAddCard.querySelector('#link-img-card');
+
+const validationConfig = {
+  formSelector: '.form',
+  inputSelector: '.form__input',
+  errorClass: 'form__input-error-message_visible',
+  errorSelector: '.form__input-error-message_visible',
+  inputInvalidClass: 'form__input_invalid',
+  inputInvalidSelector: '.form__input_invalid',
+  buttonSelector: '.form__button',
+  buttonDisabledClass: 'form__button_disabled'
+}
 
 export {
   initialCards,
@@ -69,5 +80,6 @@ export {
   popupAddCard,
   cardForm,
   cardNameInput,
-  cardLinkInput
-}
+  cardLinkInput,
+  validationConfig
+};

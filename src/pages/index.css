@@ -15,10 +15,15 @@
 @import url(../blocks/profile/__subtitle/profile__subtitle.css);
 @import url(../blocks/profile/__add-button/profile__add-button.css);
 @import url(../blocks/form/form.css);
+@import url(../blocks/form/__input-block/form__input-block);
 @import url(../blocks/form/__input-container/form__input-container.css);
-@import url(../blocks/form/__item/form__item.css);
+@import url(../blocks/form/__input/form__input.css);
+@import url(../blocks/form/__input/_invalid/form__input_invalid.css);
+@import url(../blocks/form/__input-error-message/form__input-error-message.css);
+@import url(../blocks/form/__input-error-message/_visible/form__input-error-message_visible.css);
 @import url(../blocks/form/__handlers/form__handlers.css);
 @import url(../blocks/form/__button/form__button.css);
+@import url(../blocks/form/__button/_disabled/form__button_disabled.css);
 @import url(../blocks/cards/cards.css);
 @import url(../blocks/cards/__list/cards__list.css);
 @import url(../blocks/cards/__list-item/cards__list-item.css);

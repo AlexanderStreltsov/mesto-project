@@ -1,5 +1,5 @@
-.form__item {
-  margin: 33px 0 0;
+.form__input {
+  margin: 0;
   width: 100%;
   box-sizing: border-box;
   border: none;
@@ -13,29 +13,24 @@
   outline: none;
 }
 
-.form__item:first-child {
-  margin: 0;
-}
-
-.form__item::-webkit-input-placeholder {
+.form__input::-webkit-input-placeholder {
   color: #c4c4c4;
 }
 
-.form__item::-moz-placeholder {
+.form__input::-moz-placeholder {
   color: #c4c4c4;
 }
 
-.form__item::-ms-input-placeholder {
+.form__input::-ms-input-placeholder {
   color: #c4c4c4;
 }
 
-.form__item::placeholder {
+.form__input::placeholder {
   color: #c4c4c4;
 }
 
 @media screen and (max-width: 767px) {
-  .form__item {
-    margin-top: 30px;
+  .form__input {
     padding-bottom: 10px;
   }
 }
