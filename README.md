@@ -14,7 +14,6 @@ UPD 02.04
 - улучшение UX при работе с попапами;
 - создано инфраструктурное окружение с помощью Webpack.
 
-<!--
 ### Ссылка на проект
 [Сайт "Mesto"](https://alexanderstreltsov.github.io/mesto-project/)
--->
+
