@@ -1,2 +1,2 @@
-# настройки VSCode
-.editorconfig
+node_modules
+dist
