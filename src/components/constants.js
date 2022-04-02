@@ -37,7 +37,7 @@ const cardConfig = {
   popupViewerSelector: '#image-viewer-popup',
   popupViewerImageSelector: '.image-viewer__picture',
   popupViewerDescriptionSelector: '.image-viewer__caption'
-}
+};
 
 const currentName = document.querySelector('.profile__title');
 const currentJob = document.querySelector('.profile__subtitle');
@@ -63,7 +63,7 @@ const validationConfig = {
   inputInvalidSelector: '.form__input_invalid',
   buttonSelector: '.form__button',
   buttonDisabledClass: 'form__button_disabled'
-}
+};
 
 export {
   initialCards,
