@@ -1,15 +1,4 @@
-import { validationConfig as config } from './constants.js';
-import { getAllElementsBySelector, removeClassFromListElements } from './utils.js';
-
-const clearFormInputError = (popup) => {
-  const errors = getAllElementsBySelector(popup, config.errorSelector);
-  const invalidInputs = getAllElementsBySelector(popup, config.inputInvalidSelector);
-  removeClassFromListElements(errors, config.errorClass);
-  removeClassFromListElements(invalidInputs, config.inputInvalidClass);
-}
-
 const closePopup  = (popup) => {
-  clearFormInputError(popup);
   document.removeEventListener('keydown', closeByEscHandler);
   document.removeEventListener('click', closeByClickHandler);
   popup.classList.remove('popup_opened');
