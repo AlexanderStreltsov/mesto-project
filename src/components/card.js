@@ -1,5 +1,5 @@
-import { cardsContainer } from './constants.js';
-import { openPopup } from './modal.js';
+import { cardsContainer } from './constants';
+import { openPopup } from './modal';
 
 const createCard = (name, link, config) => {
   const cardTemplate = document.querySelector(config.templateSelector).content;

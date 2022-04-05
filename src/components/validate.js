@@ -55,8 +55,6 @@ const setEventListeners = (formElement, config) => {
       toogleButtonState(formElement, inputList, config);
     })
   });
-
-  toogleButtonState(formElement, inputList, config);
 }
 
 const enableValidation = (config) => {
