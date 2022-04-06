@@ -23,6 +23,7 @@ const profilePopup = document.querySelector("#edit-popup");
 const profileForm = profilePopup.querySelector(".form");
 const profileNameInput = profilePopup.querySelector("#title");
 const profileJobInput = profilePopup.querySelector("#job");
+const profileSubmitButton = profileForm.querySelector(".form__button");
 
 const cardsContainer = document.querySelector(".cards__list");
 const cardAddButton = document.querySelector(".profile__add-button");
@@ -30,6 +31,13 @@ const popupAddCard = document.querySelector("#add-popup");
 const cardForm = popupAddCard.querySelector(".form");
 const cardNameInput = popupAddCard.querySelector("#name-card");
 const cardLinkInput = popupAddCard.querySelector("#link-img-card");
+const cardSubmitButton = popupAddCard.querySelector(".form__button");
+
+const avatarProfile = document.querySelector(".profile__avatar");
+const avatarPopup = document.querySelector("#edit-avtar-popup");
+const avatarForm = avatarPopup.querySelector(".form");
+const avatarLinkInput = avatarPopup.querySelector("#url-avatar");
+const avatarSubmitButton = avatarPopup.querySelector(".form__button");
 
 const validationConfig = {
   formSelector: ".form",
@@ -46,6 +54,7 @@ const apiConfig = {
   urlProfile: "https://nomoreparties.co/v1/plus-cohort-8/users/me",
   urlCards: "https://nomoreparties.co/v1/plus-cohort-8/cards",
   urlLikes: "https://nomoreparties.co/v1/plus-cohort-8/cards/likes",
+  urlAvatar: "https://nomoreparties.co/v1/plus-cohort-8/users/me/avatar ",
   headers: {
     "Content-type": "application/json",
     authorization: "45def5a2-c1e5-4149-8cae-fca78747b383",
@@ -61,12 +70,19 @@ export {
   profileForm,
   profileNameInput,
   profileJobInput,
+  profileSubmitButton,
   cardsContainer,
   cardAddButton,
   popupAddCard,
   cardForm,
   cardNameInput,
   cardLinkInput,
+  cardSubmitButton,
   validationConfig,
   apiConfig,
+  avatarProfile,
+  avatarPopup,
+  avatarForm,
+  avatarLinkInput,
+  avatarSubmitButton,
 };

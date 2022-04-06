@@ -51,6 +51,14 @@ const deleteLike = (id, config) => {
   }).then(onResponse);
 };
 
+const updateProfileLink = (data, config) => {
+  return fetch(`${config.urlAvatar}`, {
+    method: "PATCH",
+    headers: config.headers,
+    body: JSON.stringify(data),
+  }).then(onResponse);
+};
+
 export {
   getAllCards,
   getProfileInfo,
@@ -59,4 +67,5 @@ export {
   deleteCard,
   addLike,
   deleteLike,
+  updateProfileLink,
 };
