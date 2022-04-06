@@ -1,38 +1,15 @@
-const initialCards = [
-  {
-    name: 'Архыз',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
-  },
-  {
-    name: 'Челябинская область',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg'
-  },
-  {
-    name: 'Иваново',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg'
-  },
-  {
-    name: 'Камчатка',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg'
-  },
-  {
-    name: 'Холмогорский район',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg'
-  },
-  {
-    name: 'Байкал',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
-  }
-];
-
 const cardConfig = {
   templateSelector: '#card-template',
   cardSelector: '.cards__list-item',
   imageSelector: '.cards__picture',
   nameSelector: '.cards__title',
   likeClass: 'cards__like-button',
+  likeSelector: '.cards__like-button',
   likeActiveClass: 'cards__like-button_active',
+  likeCountSelector: '.cards__like-count',
   deleteClass: 'cards__delete-button',
+  deleteSelector: '.cards__delete-button',
+  deleteVisibleClass: 'cards__delete-button_visible',
   imageOverlayClass: 'cards__overlay',
   popupViewerSelector: '#image-viewer-popup',
   popupViewerImageSelector: '.image-viewer__picture',
@@ -65,8 +42,17 @@ const validationConfig = {
   buttonDisabledClass: 'form__button_disabled'
 };
 
+const apiConfig = {
+  urlProfile: 'https://nomoreparties.co/v1/plus-cohort-8/users/me',
+  urlCards: 'https://nomoreparties.co/v1/plus-cohort-8/cards',
+  urlLikes: 'https://nomoreparties.co/v1/plus-cohort-8/cards/likes',
+  headers: {
+    "Content-type": 'application/json',
+    authorization: '45def5a2-c1e5-4149-8cae-fca78747b383'
+  }
+}
+
 export {
-  initialCards,
   cardConfig,
   currentName,
   currentJob,
@@ -81,5 +67,6 @@ export {
   cardForm,
   cardNameInput,
   cardLinkInput,
-  validationConfig
+  validationConfig,
+  apiConfig
 };

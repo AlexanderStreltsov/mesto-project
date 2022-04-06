@@ -1,10 +1,10 @@
 import '../pages/index.css';
-import { openPopup, closePopup } from './modal.js';
+import { openPopup, closePopup } from './modal';
 import { enableValidation, toogleButtonState } from './validate';
-import { createCard, addCard, setActionCardHandlers } from './card.js';
-import { getAllElementsBySelector, removeClassFromListElements } from './utils.js';
+import { createCard, renderCard, setActionCardHandlers } from './card';
+import { getAllElementsBySelector, removeClassFromListElements } from './utils';
+import{ getAllCards, getProfileInfo, editProfileInfo, addCard } from './api';
 import {
-  initialCards,
   cardConfig,
   currentName,
   currentJob,
@@ -19,21 +19,49 @@ import {
   cardForm,
   cardNameInput,
   cardLinkInput,
-  validationConfig
-} from './constants.js';
+  validationConfig,
+  apiConfig
+} from './constants';
 
 const submitProfileHandler = (evt) => {
   evt.preventDefault();
-  currentName.textContent = profileNameInput.value;
-  currentJob.textContent = profileJobInput.value;
-  closePopup(profilePopup);
+
+  const bodyData = {
+    name: profileNameInput.value,
+    about: profileJobInput.value
+  };
+
+  editProfileInfo(bodyData, apiConfig)
+    .then((profile) => {
+      currentName.textContent = profile.name;
+      currentJob.textContent = profile.about;
+      closePopup(profilePopup);
+    })
+    .catch(err => console.log(err));
 }
 
 const submitCardHandler = (evt) => {
   evt.preventDefault();
-  const newCardElement = createCard(cardNameInput.value, cardLinkInput.value, cardConfig);
-  addCard('prependOneCard', newCardElement);
-  closePopup(popupAddCard);
+
+  const bodyData = {
+    name: cardNameInput.value,
+    link: cardLinkInput.value
+  }
+
+  addCard(bodyData, apiConfig)
+    .then(card => {
+      const newCardElement = createCard(
+        card._id,
+        card.owner._id,
+        card.name,
+        card.link,
+        card.likes,
+        cardConfig
+      );
+      renderCard('prependOneCard', newCardElement);
+      closePopup(popupAddCard);
+    })
+    .catch(err => console.log(err));
 }
 
 const clearFormInputError = (popup) => {
@@ -58,14 +86,35 @@ const addCardHandler = () => {
   openPopup(popupAddCard);
 }
 
-const initCardsElements = initialCards.map(item => createCard(item.name, item.link, cardConfig));
-
 profileEditButton.addEventListener("click", editProfileHandler);
 cardAddButton.addEventListener("click", addCardHandler);
-cardsContainer.addEventListener('click', evt => setActionCardHandlers(evt, cardConfig));
+cardsContainer.addEventListener('click', evt => setActionCardHandlers(evt, cardConfig, apiConfig));
 
 profileForm.addEventListener("submit", submitProfileHandler);
 cardForm.addEventListener("submit", submitCardHandler);
 
-addCard('appendSomeCards', initCardsElements);
 enableValidation(validationConfig);
+
+getProfileInfo(apiConfig)
+  .then(profile => {
+    currentName.textContent = profile.name;
+    currentName.setAttribute('data-owner-id', profile._id);
+    currentJob.textContent = profile.about;
+  })
+  .catch(err => console.log(err));
+
+getAllCards(apiConfig)
+  .then(cards => {
+    const serverCards = cards.map(card => {
+      return createCard(
+        card._id,
+        card.owner._id,
+        card.name,
+        card.link,
+        card.likes,
+        cardConfig
+      );
+    });
+    renderCard('appendSomeCards', serverCards);
+  })
+  .catch(err => console.log(err));
