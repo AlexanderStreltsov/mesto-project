@@ -1,0 +1,19 @@
+.profile__avatar-cover {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  background-color: #000;
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  transition: opacity .3s linear;
+}
+
+.profile__avatar-cover:hover {
+  opacity: .8;
+  cursor: pointer;
+}
+
