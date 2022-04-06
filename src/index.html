@@ -136,8 +136,8 @@
         </figure>
       </div>
     </section>
-    <section id="edit-avtar-popup" class="popup">
-      <div class="popup__container popup__container_content_edit-avtar">
+    <section id="edit-avatar-popup" class="popup">
+      <div class="popup__container">
         <h2 class="popup__heading">Обновить аватар</h2>
         <button type="button" class="popup__close-button"></button>
         <form class="form" name="edit-avatar" novalidate>
@@ -162,6 +162,17 @@
           <fieldset class="form__handlers">
             <button type="submit" class="form__button">Сохранить</button>
           </fieldset>
+        </form>
+      </div>
+    </section>
+    <section id="confirm-action" class="popup">
+      <div class="popup__container">
+        <h2 class="popup__heading">Вы уверены?</h2>
+        <button type="button" class="popup__close-button"></button>
+        <form class="form form_confirm" name="confirm-action" novalidate>
+          <button type="submit" class="form__button form__button_confirm">
+            Да
+          </button>
         </form>
       </div>
     </section>

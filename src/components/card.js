@@ -1,6 +1,11 @@
-import { cardsContainer, currentName } from "./constants";
+import {
+  cardsContainer,
+  currentName,
+  confirmDeletePopup,
+  confirmDeleteButton,
+} from "./constants";
 import { deleteCard, addLike, deleteLike } from "./api";
-import { openPopup } from "./modal";
+import { openPopup, closePopup } from "./modal";
 import { isElementContainClass, toggleElementClass } from "./utils";
 
 const isCardOwner = (owner) =>
@@ -73,12 +78,6 @@ const openImageCardViewer = (element, config) => {
   openPopup(popupViewer);
 };
 
-const deleteCardElement = (element, apiConfig) => {
-  deleteCard(element.getAttribute("data-id"), apiConfig)
-    .then(() => element.remove())
-    .catch((err) => console.log(err));
-};
-
 const changeLikeCount = (likeCountElement, likeButtonElement, res, config) => {
   likeCountElement.textContent = res.likes.length;
   toggleElementClass(likeButtonElement, config.likeActiveClass);
@@ -105,6 +104,21 @@ const getTypeForChangeLikeCount = (element, config, apiConfig) => {
   }
 };
 
+const submitDeleteCardHandler = (evt, id, apiConfig) => {
+  evt.preventDefault();
+
+  confirmDeleteButton.textContent = "Удаление...";
+  confirmDeleteButton.disabled = true;
+
+  deleteCard(id, apiConfig)
+    .then(() => {
+      document.querySelector(`[data-id="${id}"]`).remove();
+      closePopup(confirmDeletePopup);
+    })
+    .catch((err) => console.log(err))
+    .finally(() => (confirmDeleteButton.textContent = "Да"));
+};
+
 const setActionCardHandlers = (evt, config, apiConfig) => {
   const cardElement = evt.target;
   const parent = cardElement.parentElement;
@@ -117,11 +131,20 @@ const setActionCardHandlers = (evt, config, apiConfig) => {
       getTypeForChangeLikeCount(cardElement, config, apiConfig);
       break;
     case config.deleteClass:
-      deleteCardElement(parent, apiConfig);
+      confirmDeleteButton.setAttribute(
+        "data-card-id",
+        parent.getAttribute("data-id")
+      );
+      openPopup(confirmDeletePopup);
       break;
     default:
       break;
   }
 };
 
-export { createCard, renderCard, setActionCardHandlers };
+export {
+  createCard,
+  renderCard,
+  setActionCardHandlers,
+  submitDeleteCardHandler,
+};

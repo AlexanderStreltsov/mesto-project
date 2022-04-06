@@ -34,10 +34,14 @@ const cardLinkInput = popupAddCard.querySelector("#link-img-card");
 const cardSubmitButton = popupAddCard.querySelector(".form__button");
 
 const avatarProfile = document.querySelector(".profile__avatar");
-const avatarPopup = document.querySelector("#edit-avtar-popup");
+const avatarPopup = document.querySelector("#edit-avatar-popup");
 const avatarForm = avatarPopup.querySelector(".form");
 const avatarLinkInput = avatarPopup.querySelector("#url-avatar");
 const avatarSubmitButton = avatarPopup.querySelector(".form__button");
+
+const confirmDeletePopup = document.querySelector("#confirm-action");
+const confirmDeleteForm = confirmDeletePopup.querySelector(".form");
+const confirmDeleteButton = confirmDeletePopup.querySelector(".form__button");
 
 const validationConfig = {
   formSelector: ".form",
@@ -85,4 +89,7 @@ export {
   avatarForm,
   avatarLinkInput,
   avatarSubmitButton,
+  confirmDeletePopup,
+  confirmDeleteForm,
+  confirmDeleteButton,
 };

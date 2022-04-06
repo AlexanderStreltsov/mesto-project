@@ -17,6 +17,7 @@
 @import url(../blocks/profile/__subtitle/profile__subtitle.css);
 @import url(../blocks/profile/__add-button/profile__add-button.css);
 @import url(../blocks/form/form.css);
+@import url(../blocks/form/_confirm/form_confirm.css);
 @import url(../blocks/form/__input-block/form__input-block);
 @import url(../blocks/form/__input-container/form__input-container.css);
 @import url(../blocks/form/__input/form__input.css);

@@ -1,8 +1,13 @@
 import "../pages/index.css";
 import { openPopup, closePopup } from "./modal";
 import { enableValidation, toogleButtonState } from "./validate";
-import { createCard, renderCard, setActionCardHandlers } from "./card";
 import { getAllElementsBySelector, removeClassFromListElements } from "./utils";
+import {
+  createCard,
+  renderCard,
+  setActionCardHandlers,
+  submitDeleteCardHandler,
+} from "./card";
 import {
   getAllCards,
   getProfileInfo,
@@ -34,12 +39,19 @@ import {
   avatarForm,
   avatarLinkInput,
   avatarSubmitButton,
+  confirmDeleteForm,
+  confirmDeleteButton,
 } from "./constants";
+
+const changeButtonContent = (button, text) => {
+  button.textContent = text;
+  button.disabled = true;
+};
 
 const submitProfileHandler = (evt) => {
   evt.preventDefault();
 
-  profileSubmitButton.textContent = "Сохранение...";
+  changeButtonContent(profileSubmitButton, "Сохранение...");
 
   const bodyData = {
     name: profileNameInput.value,
@@ -53,13 +65,13 @@ const submitProfileHandler = (evt) => {
       closePopup(profilePopup);
     })
     .catch((err) => console.log(err))
-    .finally(() => (profileSubmitButton.textContent = "Сохранить"));
+    .finally(() => changeButtonContent(profileSubmitButton, "Сохранение"));
 };
 
 const submitCardHandler = (evt) => {
   evt.preventDefault();
 
-  cardSubmitButton.textContent = "Сохранение...";
+  changeButtonContent(cardSubmitButton, "Сохранение...");
 
   const bodyData = {
     name: cardNameInput.value,
@@ -80,13 +92,13 @@ const submitCardHandler = (evt) => {
       closePopup(popupAddCard);
     })
     .catch((err) => console.log(err))
-    .finally(() => (cardSubmitButton.textContent = "Сохранить"));
+    .finally(() => changeButtonContent(cardSubmitButton, "Создать"));
 };
 
 const submitAvatarHandler = (evt) => {
   evt.preventDefault();
 
-  avatarSubmitButton.textContent = "Сохранение...";
+  changeButtonContent(avatarSubmitButton, "Сохранение...");
 
   const bodyData = {
     avatar: avatarLinkInput.value,
@@ -98,7 +110,7 @@ const submitAvatarHandler = (evt) => {
       closePopup(avatarPopup);
     })
     .catch((err) => console.log(err))
-    .finally(() => (avatarSubmitButton.textContent = "Сохранить"));
+    .finally(() => changeButtonContent(avatarSubmitButton, "Сохранить"));
 };
 
 const clearFormInputError = (popup) => {
@@ -157,6 +169,13 @@ cardsContainer.addEventListener("click", (evt) =>
 profileForm.addEventListener("submit", submitProfileHandler);
 cardForm.addEventListener("submit", submitCardHandler);
 avatarForm.addEventListener("submit", submitAvatarHandler);
+confirmDeleteForm.addEventListener("submit", (evt) =>
+  submitDeleteCardHandler(
+    evt,
+    confirmDeleteButton.getAttribute("data-card-id"),
+    apiConfig
+  )
+);
 
 enableValidation(validationConfig);
 
