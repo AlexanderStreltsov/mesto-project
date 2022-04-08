@@ -1,19 +1,15 @@
 import "../pages/index.css";
 import { openPopup, closePopup } from "./modal";
+import { createCard, renderCard } from "./card";
 import { enableValidation, toogleButtonState } from "./validate";
 import { getAllElementsBySelector, removeClassFromListElements } from "./utils";
 import {
-  createCard,
-  renderCard,
-  setActionCardHandlers,
-  submitDeleteCardHandler,
-} from "./card";
-import {
-  getAllCards,
-  getProfileInfo,
-  editProfileInfo,
+  getCards,
+  getUserInfo,
+  editUserInfo,
   addCard,
-  updateProfileLink,
+  deleteCard,
+  updateUserAvatar,
 } from "./api";
 import {
   cardConfig,
@@ -25,7 +21,6 @@ import {
   profileNameInput,
   profileJobInput,
   profileSubmitButton,
-  cardsContainer,
   cardAddButton,
   popupAddCard,
   cardForm,
@@ -39,16 +34,19 @@ import {
   avatarForm,
   avatarLinkInput,
   avatarSubmitButton,
+  confirmDeletePopup,
   confirmDeleteForm,
   confirmDeleteButton,
+  spinner,
+  content,
 } from "./constants";
 
-const changeButtonContent = (button, text) => {
+const changeButtonContent = (button, text, isDisabled = true) => {
   button.textContent = text;
-  button.disabled = true;
+  button.disabled = isDisabled;
 };
 
-const submitProfileHandler = (evt) => {
+const handleProfileFormSubmit = (evt) => {
   evt.preventDefault();
 
   changeButtonContent(profileSubmitButton, "Сохранение...");
@@ -58,7 +56,7 @@ const submitProfileHandler = (evt) => {
     about: profileJobInput.value,
   };
 
-  editProfileInfo(bodyData, apiConfig)
+  editUserInfo(bodyData, apiConfig)
     .then((profile) => {
       currentName.textContent = profile.name;
       currentJob.textContent = profile.about;
@@ -68,7 +66,7 @@ const submitProfileHandler = (evt) => {
     .finally(() => changeButtonContent(profileSubmitButton, "Сохранение"));
 };
 
-const submitCardHandler = (evt) => {
+const handleCardFormSubmit = (evt) => {
   evt.preventDefault();
 
   changeButtonContent(cardSubmitButton, "Сохранение...");
@@ -95,7 +93,21 @@ const submitCardHandler = (evt) => {
     .finally(() => changeButtonContent(cardSubmitButton, "Создать"));
 };
 
-const submitAvatarHandler = (evt) => {
+const handleConfirmDeleteCardFormSubmit = (evt, id, apiConfig) => {
+  evt.preventDefault();
+
+  changeButtonContent(confirmDeleteButton, "Удаление...");
+
+  deleteCard(id, apiConfig)
+    .then(() => {
+      document.querySelector(`[data-card-id="${id}"]`).remove();
+      closePopup(confirmDeletePopup);
+    })
+    .catch((err) => console.log(err))
+    .finally(() => changeButtonContent(confirmDeleteButton, "Да", false));
+};
+
+const handleAvatarFormSubmit = (evt) => {
   evt.preventDefault();
 
   changeButtonContent(avatarSubmitButton, "Сохранение...");
@@ -104,7 +116,7 @@ const submitAvatarHandler = (evt) => {
     avatar: avatarLinkInput.value,
   };
 
-  updateProfileLink(bodyData, apiConfig)
+  updateUserAvatar(bodyData, apiConfig)
     .then((profile) => {
       avatarProfile.style.backgroundImage = `url(${profile.avatar})`;
       closePopup(avatarPopup);
@@ -129,7 +141,7 @@ const clearFormInputError = (popup) => {
   );
 };
 
-const editProfileHandler = () => {
+const openProfilePopup = () => {
   profileNameInput.value = currentName.textContent;
   profileJobInput.value = currentJob.textContent;
   clearFormInputError(profilePopup);
@@ -141,7 +153,7 @@ const editProfileHandler = () => {
   openPopup(profilePopup);
 };
 
-const addCardHandler = () => {
+const openCardPopup = () => {
   cardForm.reset();
   clearFormInputError(popupAddCard);
   toogleButtonState(
@@ -152,25 +164,54 @@ const addCardHandler = () => {
   openPopup(popupAddCard);
 };
 
-const editAvatarHandler = () => {
+const openAvatarPopup = () => {
   avatarForm.reset();
   clearFormInputError(avatarPopup);
   toogleButtonState(avatarPopup, [avatarLinkInput], validationConfig);
   openPopup(avatarPopup);
 };
 
-profileEditButton.addEventListener("click", editProfileHandler);
-cardAddButton.addEventListener("click", addCardHandler);
-avatarProfile.addEventListener("click", editAvatarHandler);
-cardsContainer.addEventListener("click", (evt) =>
-  setActionCardHandlers(evt, cardConfig, apiConfig)
-);
+const renderUserInfo = (profile) => {
+  avatarProfile.style.backgroundImage = `url(${profile.avatar}`;
+  currentName.textContent = profile.name;
+  currentName.setAttribute("data-owner-id", profile._id);
+  currentJob.textContent = profile.about;
+};
 
-profileForm.addEventListener("submit", submitProfileHandler);
-cardForm.addEventListener("submit", submitCardHandler);
-avatarForm.addEventListener("submit", submitAvatarHandler);
+const renderAllCards = (cards) => {
+  const serverCards = cards.map((card) => {
+    return createCard(
+      card._id,
+      card.owner._id,
+      card.name,
+      card.link,
+      card.likes,
+      cardConfig
+    );
+  });
+
+  renderCard("appendSomeCards", serverCards);
+};
+
+function renderLoading(isLoading) {
+  if (isLoading) {
+    spinner.classList.add("spinner_visible");
+    content.classList.add("content_hidden");
+  } else {
+    spinner.classList.remove("spinner_visible");
+    content.classList.remove("content_hidden");
+  }
+}
+
+profileEditButton.addEventListener("click", openProfilePopup);
+cardAddButton.addEventListener("click", openCardPopup);
+avatarProfile.addEventListener("click", openAvatarPopup);
+
+profileForm.addEventListener("submit", handleProfileFormSubmit);
+cardForm.addEventListener("submit", handleCardFormSubmit);
+avatarForm.addEventListener("submit", handleAvatarFormSubmit);
 confirmDeleteForm.addEventListener("submit", (evt) =>
-  submitDeleteCardHandler(
+  handleConfirmDeleteCardFormSubmit(
     evt,
     confirmDeleteButton.getAttribute("data-card-id"),
     apiConfig
@@ -179,27 +220,11 @@ confirmDeleteForm.addEventListener("submit", (evt) =>
 
 enableValidation(validationConfig);
 
-getProfileInfo(apiConfig)
-  .then((profile) => {
-    avatarProfile.style.backgroundImage = `url(${profile.avatar}`;
-    currentName.textContent = profile.name;
-    currentName.setAttribute("data-owner-id", profile._id);
-    currentJob.textContent = profile.about;
+renderLoading(true);
+Promise.all([getUserInfo(apiConfig), getCards(apiConfig)])
+  .then(([userData, cards]) => {
+    renderUserInfo(userData);
+    renderAllCards(cards);
   })
-  .catch((err) => console.log(err));
-
-getAllCards(apiConfig)
-  .then((cards) => {
-    const serverCards = cards.map((card) => {
-      return createCard(
-        card._id,
-        card.owner._id,
-        card.name,
-        card.link,
-        card.likes,
-        cardConfig
-      );
-    });
-    renderCard("appendSomeCards", serverCards);
-  })
-  .catch((err) => console.log(err));
+  .catch((err) => console.log(err))
+  .finally(() => renderLoading(false));

@@ -1,15 +1,21 @@
 import {
+  cardTemplate,
   cardsContainer,
   currentName,
   confirmDeletePopup,
   confirmDeleteButton,
+  popupViewer,
+  popupViewerImage,
+  popupViewerDescription,
+  apiConfig,
 } from "./constants";
-import { deleteCard, addLike, deleteLike } from "./api";
-import { openPopup, closePopup } from "./modal";
+import { addLike, deleteLike } from "./api";
+import { openPopup } from "./modal";
 import { isElementContainClass, toggleElementClass } from "./utils";
 
-const isCardOwner = (owner) =>
-  owner === currentName.getAttribute("data-owner-id");
+const isCardOwner = (owner) => {
+  return owner === currentName.getAttribute("data-owner-id");
+};
 
 const isLikeCard = (likes) => {
   return likes.some(
@@ -17,19 +23,55 @@ const isLikeCard = (likes) => {
   );
 };
 
+const handleViewImageCard = (name, link) => {
+  popupViewerImage.src = link;
+  popupViewerImage.alt = name;
+  popupViewerDescription.textContent = name;
+
+  openPopup(popupViewer);
+};
+
+const renderLikesCount = (cardLikeCount, cardLikeButton, res, config) => {
+  cardLikeCount.textContent = res.likes.length;
+  toggleElementClass(cardLikeButton, config.likeActiveClass);
+};
+
+const handleChangeLikesCount = (
+  cardId,
+  cardLikeButton,
+  cardLikeCount,
+  cardConfig,
+  apiConfig
+) => {
+  if (isElementContainClass(cardLikeButton, cardConfig.likeActiveClass)) {
+    deleteLike(cardId, apiConfig)
+      .then((res) => {
+        renderLikesCount(cardLikeCount, cardLikeButton, res, cardConfig);
+      })
+      .catch((err) => console.log(err));
+  } else {
+    addLike(cardId, apiConfig)
+      .then((res) => {
+        renderLikesCount(cardLikeCount, cardLikeButton, res, cardConfig);
+      })
+      .catch((err) => console.log(err));
+  }
+};
+
 const createCard = (id, owner, name, link, likes, config) => {
-  const cardTemplate = document.querySelector(config.templateSelector).content;
   const cardElement = cardTemplate
     .querySelector(config.cardSelector)
     .cloneNode(true);
   const cardImage = cardElement.querySelector(config.imageSelector);
+  const cardImageOverlay = cardElement.querySelector(
+    config.imageOverlaySelector
+  );
   const cardName = cardElement.querySelector(config.nameSelector);
   const cardLikeButton = cardElement.querySelector(config.likeSelector);
   const cardLikeCount = cardElement.querySelector(config.likeCountSelector);
   const deleteCardButton = cardElement.querySelector(config.deleteSelector);
 
-  cardElement.setAttribute("data-id", id);
-  cardElement.setAttribute("data-owner-id", owner);
+  cardElement.setAttribute("data-card-id", id);
 
   cardImage.src = link;
   cardImage.alt = name;
@@ -43,6 +85,25 @@ const createCard = (id, owner, name, link, likes, config) => {
   if (isCardOwner(owner)) {
     deleteCardButton.classList.add(config.deleteVisibleClass);
   }
+
+  cardImageOverlay.addEventListener("click", () => {
+    handleViewImageCard(name, link);
+  });
+
+  cardLikeButton.addEventListener("click", () => {
+    handleChangeLikesCount(
+      id,
+      cardLikeButton,
+      cardLikeCount,
+      config,
+      apiConfig
+    );
+  });
+
+  deleteCardButton.addEventListener("click", () => {
+    confirmDeleteButton.setAttribute("data-card-id", id);
+    openPopup(confirmDeletePopup);
+  });
 
   return cardElement;
 };
@@ -61,90 +122,4 @@ const renderCard = (type, data) => {
   }
 };
 
-const openImageCardViewer = (element, config) => {
-  const popupViewer = document.querySelector(config.popupViewerSelector);
-  const popupViewerImage = popupViewer.querySelector(
-    config.popupViewerImageSelector
-  );
-  const popupViewerDescription = popupViewer.querySelector(
-    config.popupViewerDescriptionSelector
-  );
-  const imageElement = element.querySelector(config.imageSelector);
-
-  popupViewerImage.src = imageElement.src;
-  popupViewerImage.alt = imageElement.alt;
-  popupViewerDescription.textContent = imageElement.alt;
-
-  openPopup(popupViewer);
-};
-
-const changeLikeCount = (likeCountElement, likeButtonElement, res, config) => {
-  likeCountElement.textContent = res.likes.length;
-  toggleElementClass(likeButtonElement, config.likeActiveClass);
-};
-
-const getTypeForChangeLikeCount = (element, config, apiConfig) => {
-  const cardElement = element.parentElement.parentElement.parentElement;
-  const cardId = cardElement.getAttribute("data-id");
-  const likeButtonElement = cardElement.querySelector(config.likeSelector);
-  const likeCountElement = cardElement.querySelector(config.likeCountSelector);
-
-  if (isElementContainClass(element, config.likeActiveClass)) {
-    deleteLike(cardId, apiConfig)
-      .then((res) => {
-        changeLikeCount(likeCountElement, likeButtonElement, res, config);
-      })
-      .catch((err) => console.log(err));
-  } else {
-    addLike(cardId, apiConfig)
-      .then((res) => {
-        changeLikeCount(likeCountElement, likeButtonElement, res, config);
-      })
-      .catch((err) => console.log(err));
-  }
-};
-
-const submitDeleteCardHandler = (evt, id, apiConfig) => {
-  evt.preventDefault();
-
-  confirmDeleteButton.textContent = "Удаление...";
-  confirmDeleteButton.disabled = true;
-
-  deleteCard(id, apiConfig)
-    .then(() => {
-      document.querySelector(`[data-id="${id}"]`).remove();
-      closePopup(confirmDeletePopup);
-    })
-    .catch((err) => console.log(err))
-    .finally(() => (confirmDeleteButton.textContent = "Да"));
-};
-
-const setActionCardHandlers = (evt, config, apiConfig) => {
-  const cardElement = evt.target;
-  const parent = cardElement.parentElement;
-
-  switch (cardElement.classList[0]) {
-    case config.imageOverlayClass:
-      openImageCardViewer(cardElement, config);
-      break;
-    case config.likeClass:
-      getTypeForChangeLikeCount(cardElement, config, apiConfig);
-      break;
-    case config.deleteClass:
-      confirmDeleteButton.setAttribute(
-        "data-card-id",
-        parent.getAttribute("data-id")
-      );
-      openPopup(confirmDeletePopup);
-      break;
-    default:
-      break;
-  }
-};
-
-export {
-  createCard,
-  renderCard,
-  setActionCardHandlers,
-  submitDeleteCardHandler,
-};
+export { createCard, renderCard };
