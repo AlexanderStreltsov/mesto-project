@@ -1,6 +1,6 @@
 const closePopup = (popup) => {
   document.removeEventListener("keydown", handleEscapeKey);
-  document.removeEventListener("click", handlePopupClick);
+  document.removeEventListener("mousedown", handlePopupClick);
   popup.classList.remove("popup_opened");
 };
 
