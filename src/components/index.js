@@ -37,6 +37,8 @@ import {
   confirmDeletePopup,
   confirmDeleteForm,
   confirmDeleteButton,
+  spinner,
+  content,
 } from "./constants";
 
 const changeButtonContent = (button, text, isDisabled = true) => {
@@ -191,6 +193,16 @@ const renderAllCards = (cards) => {
   renderCard("appendSomeCards", serverCards);
 };
 
+function renderLoading(isLoading) {
+  if (isLoading) {
+    spinner.classList.add("spinner_visible");
+    content.classList.add("content_hidden");
+  } else {
+    spinner.classList.remove("spinner_visible");
+    content.classList.remove("content_hidden");
+  }
+}
+
 profileEditButton.addEventListener("click", openProfilePopup);
 cardAddButton.addEventListener("click", openCardPopup);
 avatarProfile.addEventListener("click", openAvatarPopup);
@@ -208,9 +220,11 @@ confirmDeleteForm.addEventListener("submit", (evt) =>
 
 enableValidation(validationConfig);
 
+renderLoading(true);
 Promise.all([getUserInfo(apiConfig), getCards(apiConfig)])
   .then(([userData, cards]) => {
     renderUserInfo(userData);
     renderAllCards(cards);
   })
-  .catch((err) => console.log(err));
+  .catch((err) => console.log(err))
+  .finally(() => renderLoading(false));

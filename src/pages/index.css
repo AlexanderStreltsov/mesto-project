@@ -5,6 +5,7 @@
 @import url(../blocks/header/header.css);
 @import url(../blocks/header/__logo/header__logo.css);
 @import url(../blocks/content/content.css);
+@import url(../blocks/content/_hidden/content_hidden.css);
 @import url(../blocks/profile/profile.css);
 @import url(../blocks/profile/__information-section/profile__information-section.css);
 @import url(../blocks/profile/__avatar/profile__avatar.css);
@@ -51,3 +52,6 @@
 @import url(../blocks/image-viewer/__figure/image-viewer__figure.css);
 @import url(../blocks/image-viewer/__picture/image-viewer__picture.css);
 @import url(../blocks/image-viewer/__caption/image-viewer__caption.css);
+@import url(../blocks/spinner/spinner.css);
+@import url(../blocks/spinner/_visible/spinner_visible.css);
+@import url(../blocks/spinner/__icon/spinner__icon.css);

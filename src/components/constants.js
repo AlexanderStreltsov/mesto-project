@@ -65,6 +65,9 @@ const apiConfig = {
   },
 };
 
+const spinner = document.querySelector(".spinner");
+const content = document.querySelector(".content");
+
 export {
   cardConfig,
   currentName,
@@ -96,4 +99,6 @@ export {
   popupViewerImage,
   popupViewerDescription,
   cardTemplate,
+  spinner,
+  content,
 };
