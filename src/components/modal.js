@@ -1,18 +1,18 @@
 const closePopup = (popup) => {
-  document.removeEventListener("keydown", closeByEscHandler);
-  document.removeEventListener("click", closeByClickHandler);
+  document.removeEventListener("keydown", handleEscapeKey);
+  document.removeEventListener("click", handlePopupClick);
   popup.classList.remove("popup_opened");
 };
 
 const getOpenedPopup = () => document.querySelector(".popup_opened");
 
-const closeByEscHandler = (evt) => {
+const handleEscapeKey = (evt) => {
   if (evt.key === "Escape") {
     closePopup(getOpenedPopup());
   }
 };
 
-const closeByClickHandler = (evt) => {
+const handlePopupClick = (evt) => {
   const elementClasses = evt.target.classList;
   if (
     elementClasses.contains("popup") ||
@@ -23,8 +23,8 @@ const closeByClickHandler = (evt) => {
 };
 
 const openPopup = (popup) => {
-  document.addEventListener("keydown", closeByEscHandler);
-  document.addEventListener("click", closeByClickHandler);
+  document.addEventListener("keydown", handleEscapeKey);
+  document.addEventListener("mousedown", handlePopupClick);
   popup.classList.add("popup_opened");
 };
 

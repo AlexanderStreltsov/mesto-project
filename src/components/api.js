@@ -2,19 +2,19 @@ const checkResponse = (res) => {
   return res.ok ? res.json() : Promise.reject(res);
 };
 
-const getAllCards = (config) => {
+const getCards = (config) => {
   return fetch(`${config.baseUrl}/cards`, {
     headers: config.headers,
   }).then(checkResponse);
 };
 
-const getProfileInfo = (config) => {
+const getUserInfo = (config) => {
   return fetch(`${config.baseUrl}/users/me`, {
     headers: config.headers,
   }).then(checkResponse);
 };
 
-const editProfileInfo = (data, config) => {
+const editUserInfo = (data, config) => {
   return fetch(`${config.baseUrl}/users/me`, {
     method: "PATCH",
     headers: config.headers,
@@ -51,7 +51,7 @@ const deleteLike = (id, config) => {
   }).then(checkResponse);
 };
 
-const updateProfileLink = (data, config) => {
+const updateUserAvatar = (data, config) => {
   return fetch(`${config.baseUrl}/users/me/avatar`, {
     method: "PATCH",
     headers: config.headers,
@@ -60,12 +60,12 @@ const updateProfileLink = (data, config) => {
 };
 
 export {
-  getAllCards,
-  getProfileInfo,
-  editProfileInfo,
+  getCards,
   addCard,
   deleteCard,
   addLike,
   deleteLike,
-  updateProfileLink,
+  getUserInfo,
+  editUserInfo,
+  updateUserAvatar,
 };
