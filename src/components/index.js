@@ -104,7 +104,7 @@ const handleConfirmDeleteCardFormSubmit = (evt, id, apiConfig) => {
       closePopup(confirmDeletePopup);
     })
     .catch((err) => console.log(err))
-    .finally(() => changeButtonContent(cardSubmitButton, "Создать", false));
+    .finally(() => changeButtonContent(confirmDeleteButton, "Да", false));
 };
 
 const handleAvatarFormSubmit = (evt) => {
