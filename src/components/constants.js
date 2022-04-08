@@ -55,10 +55,7 @@ const validationConfig = {
 };
 
 const apiConfig = {
-  urlProfile: "https://nomoreparties.co/v1/plus-cohort-8/users/me",
-  urlCards: "https://nomoreparties.co/v1/plus-cohort-8/cards",
-  urlLikes: "https://nomoreparties.co/v1/plus-cohort-8/cards/likes",
-  urlAvatar: "https://nomoreparties.co/v1/plus-cohort-8/users/me/avatar ",
+  baseUrl: 'https://nomoreparties.co/v1/plus-cohort-8',
   headers: {
     "Content-type": "application/json",
     authorization: "45def5a2-c1e5-4149-8cae-fca78747b383",
