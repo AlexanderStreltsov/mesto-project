@@ -1,4 +1,5 @@
 const cardConfig = {
+  templateSelector: "#card-template",
   cardSelector: ".cards__list-item",
   imageSelector: ".cards__picture",
   nameSelector: ".cards__title",
@@ -11,6 +12,8 @@ const cardConfig = {
   deleteVisibleClass: "cards__delete-button_visible",
   imageOverlaySelector: ".cards__overlay",
 };
+
+const profileIdKey = "profile-id";
 
 const currentName = document.querySelector(".profile__title");
 const currentJob = document.querySelector(".profile__subtitle");
@@ -101,4 +104,5 @@ export {
   cardTemplate,
   spinner,
   content,
+  profileIdKey,
 };

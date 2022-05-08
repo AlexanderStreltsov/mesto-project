@@ -10,6 +10,8 @@ import {
   addCard,
   deleteCard,
   updateUserAvatar,
+  addLike,
+  deleteLike,
 } from "./api";
 import {
   cardConfig,
@@ -39,7 +41,14 @@ import {
   confirmDeleteButton,
   spinner,
   content,
+  profileIdKey,
+  popupViewer,
+  popupViewerImage,
+  popupViewerDescription,
 } from "./constants";
+
+import Card_ from "./Card_";
+import Section from "./Section";
 
 const changeButtonContent = (button, text, isDisabled = true) => {
   button.textContent = text;
@@ -174,20 +183,61 @@ const openAvatarPopup = () => {
 const renderUserInfo = (profile) => {
   avatarProfile.style.backgroundImage = `url(${profile.avatar}`;
   currentName.textContent = profile.name;
-  currentName.setAttribute("data-owner-id", profile._id);
+  sessionStorage.setItem(profileIdKey, profile._id);
   currentJob.textContent = profile.about;
 };
 
+const handleViewImage = (name, link) => {
+  popupViewerImage.src = link;
+  popupViewerImage.alt = name;
+  popupViewerDescription.textContent = name;
+  openPopup(popupViewer);
+};
+
+const handleUpdateLikesCount = (
+  isLike,
+  cardId,
+  likeCountElement,
+  likeButtonElement,
+  likeActiveClassName
+) => {
+  if (isLike) {
+    deleteLike(cardId, apiConfig)
+      .then((res) => {
+        likeCountElement.textContent = res.likes.length;
+        likeButtonElement.classList.toggle(likeActiveClassName);
+      })
+      .catch((err) => console.log(err));
+  } else {
+    addLike(cardId, apiConfig)
+      .then((res) => {
+        likeCountElement.textContent = res.likes.length;
+        likeButtonElement.classList.toggle(likeActiveClassName);
+      })
+      .catch((err) => console.log(err));
+  }
+};
+
 const renderAllCards = (cards) => {
-  const serverCards = cards.map((card) => {
-    return createCard(
-      card._id,
-      card.owner._id,
-      card.name,
-      card.link,
-      card.likes,
+  const serverCards = cards.map((serverCard) => {
+    const card = new Card_(
+      {
+        data: serverCard,
+        handleViewImage: handleViewImage,
+        handleUpdateLikesCount: handleUpdateLikesCount,
+        handleDeleteConfirm: () => {},
+      },
       cardConfig
     );
+    return card.generate();
+    // return createCard(
+    //   card._id,
+    //   card.owner._id,
+    //   card.name,
+    //   card.link,
+    //   card.likes,
+    //   cardConfig
+    // );
   });
 
   renderCard("appendSomeCards", serverCards);
@@ -224,6 +274,39 @@ renderLoading(true);
 Promise.all([getUserInfo(apiConfig), getCards(apiConfig)])
   .then(([userData, cards]) => {
     renderUserInfo(userData);
+
+    const serverCards = cards.map((serverCard) => {
+      return new Card_(
+        {
+          data: serverCard,
+          handleViewImage: handleViewImage,
+          handleUpdateLikesCount: handleUpdateLikesCount,
+          handleDeleteConfirm: () => {},
+        },
+        cardConfig
+      ).generate();
+    });
+
+    const cardList = Section(
+      {
+        data: cards,
+        renderer: () => {
+          const card = new Card_(
+            {
+              data: serverCard,
+              handleViewImage: handleViewImage,
+              handleUpdateLikesCount: handleUpdateLikesCount,
+              handleDeleteConfirm: () => {},
+            },
+            cardConfig
+          );
+          const cardElement = card.generate();
+          cardList.setItem(cardElement);
+        },
+      },
+
+    );
+
     renderAllCards(cards);
   })
   .catch((err) => console.log(err))
