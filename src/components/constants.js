@@ -1,4 +1,24 @@
+const apiConfig = {
+  baseUrl: "https://nomoreparties.co/v1/plus-cohort-8",
+  headers: {
+    "Content-type": "application/json",
+    authorization: "45def5a2-c1e5-4149-8cae-fca78747b383",
+  },
+};
+
+const validationConfig = {
+  formSelector: ".form",
+  inputSelector: ".form__input",
+  errorClass: "form__input-error-message_visible",
+  errorSelector: ".form__input-error-message_visible",
+  inputInvalidClass: "form__input_invalid",
+  inputInvalidSelector: ".form__input_invalid",
+  buttonSelector: ".form__button",
+  buttonDisabledClass: "form__button_disabled",
+};
+
 const cardConfig = {
+  containerSelector: ".cards__list",
   templateSelector: "#card-template",
   cardSelector: ".cards__list-item",
   imageSelector: ".cards__picture",
@@ -13,7 +33,8 @@ const cardConfig = {
   imageOverlaySelector: ".cards__overlay",
 };
 
-const profileIdKey = "profile-id";
+const profileIdKey = "data-profile-id";
+const cardIdKey = "data-card-id";
 
 const currentName = document.querySelector(".profile__title");
 const currentJob = document.querySelector(".profile__subtitle");
@@ -48,25 +69,6 @@ const avatarSubmitButton = avatarPopup.querySelector(".form__button");
 const confirmDeletePopup = document.querySelector("#confirm-action");
 const confirmDeleteForm = confirmDeletePopup.querySelector(".form");
 const confirmDeleteButton = confirmDeletePopup.querySelector(".form__button");
-
-const validationConfig = {
-  formSelector: ".form",
-  inputSelector: ".form__input",
-  errorClass: "form__input-error-message_visible",
-  errorSelector: ".form__input-error-message_visible",
-  inputInvalidClass: "form__input_invalid",
-  inputInvalidSelector: ".form__input_invalid",
-  buttonSelector: ".form__button",
-  buttonDisabledClass: "form__button_disabled",
-};
-
-const apiConfig = {
-  baseUrl: "https://nomoreparties.co/v1/plus-cohort-8",
-  headers: {
-    "Content-type": "application/json",
-    authorization: "45def5a2-c1e5-4149-8cae-fca78747b383",
-  },
-};
 
 const spinner = document.querySelector(".spinner");
 const content = document.querySelector(".content");
@@ -105,4 +107,5 @@ export {
   spinner,
   content,
   profileIdKey,
+  cardIdKey,
 };

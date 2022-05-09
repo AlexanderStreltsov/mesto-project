@@ -1,17 +1,26 @@
 export default class Section {
-  constructor({ data, renderer }, containerSelector) {
-    this._renderedItems = data;
+  constructor({ renderer }, containerSelector) {
     this._renderer = renderer;
     this._container = document.querySelector(containerSelector);
   }
 
-  setItem(element) {
-    this._container.append(element);
+  addItem(element, order = "after") {
+    order === "after"
+      ? this._container.append(element)
+      : this._container.prepend(element);
   }
 
-  renderItems() {
-    this._renderedItems.forEach((item) => {
-      this._renderer(item);
-    });
+  render(type, data) {
+    switch (type) {
+      case "cardList":
+        data.forEach((item) => this._renderer(item));
+        break;
+      case "newCard":
+        this._renderer(data);
+        break;
+      default:
+        console.log(`Insert type ${type} not in select`);
+        break;
+    }
   }
 }

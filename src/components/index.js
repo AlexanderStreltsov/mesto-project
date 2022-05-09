@@ -1,6 +1,5 @@
 import "../pages/index.css";
 import { openPopup, closePopup } from "./modal";
-import { createCard, renderCard } from "./card";
 import { enableValidation, toogleButtonState } from "./validate";
 import { getAllElementsBySelector, removeClassFromListElements } from "./utils";
 import {
@@ -45,9 +44,10 @@ import {
   popupViewer,
   popupViewerImage,
   popupViewerDescription,
+  cardIdKey,
 } from "./constants";
 
-import Card_ from "./Card_";
+import Card from "./Card";
 import Section from "./Section";
 
 const changeButtonContent = (button, text, isDisabled = true) => {
@@ -86,30 +86,40 @@ const handleCardFormSubmit = (evt) => {
   };
 
   addCard(bodyData, apiConfig)
-    .then((card) => {
-      const newCardElement = createCard(
-        card._id,
-        card.owner._id,
-        card.name,
-        card.link,
-        card.likes,
-        cardConfig
+    .then((serverCard) => {
+      const cardElement = new Section(
+        {
+          renderer: (item) => {
+            const card = new Card(
+              {
+                data: item,
+                handleViewImage,
+                handleUpdateLikesCount,
+                handleOpenConfirmDelete,
+              },
+              cardConfig
+            );
+            cardElement.addItem(card.generate(), "before");
+          },
+        },
+        cardConfig.containerSelector
       );
-      renderCard("prependOneCard", newCardElement);
+      cardElement.render("newCard", serverCard);
       closePopup(popupAddCard);
     })
     .catch((err) => console.log(err))
     .finally(() => changeButtonContent(cardSubmitButton, "Создать"));
 };
 
-const handleConfirmDeleteCardFormSubmit = (evt, id, apiConfig) => {
+const handleConfirmDeleteCardFormSubmit = (evt) => {
   evt.preventDefault();
 
   changeButtonContent(confirmDeleteButton, "Удаление...");
 
-  deleteCard(id, apiConfig)
+  const cardId = sessionStorage.getItem(cardIdKey);
+  deleteCard(cardId, apiConfig)
     .then(() => {
-      document.querySelector(`[data-card-id="${id}"]`).remove();
+      document.querySelector(`[${cardIdKey}="${cardId}"]`).remove();
       closePopup(confirmDeletePopup);
     })
     .catch((err) => console.log(err))
@@ -218,29 +228,9 @@ const handleUpdateLikesCount = (
   }
 };
 
-const renderAllCards = (cards) => {
-  const serverCards = cards.map((serverCard) => {
-    const card = new Card_(
-      {
-        data: serverCard,
-        handleViewImage: handleViewImage,
-        handleUpdateLikesCount: handleUpdateLikesCount,
-        handleDeleteConfirm: () => {},
-      },
-      cardConfig
-    );
-    return card.generate();
-    // return createCard(
-    //   card._id,
-    //   card.owner._id,
-    //   card.name,
-    //   card.link,
-    //   card.likes,
-    //   cardConfig
-    // );
-  });
-
-  renderCard("appendSomeCards", serverCards);
+const handleOpenConfirmDelete = (cardId) => {
+  sessionStorage.setItem(cardIdKey, cardId);
+  openPopup(confirmDeletePopup);
 };
 
 function renderLoading(isLoading) {
@@ -261,11 +251,7 @@ profileForm.addEventListener("submit", handleProfileFormSubmit);
 cardForm.addEventListener("submit", handleCardFormSubmit);
 avatarForm.addEventListener("submit", handleAvatarFormSubmit);
 confirmDeleteForm.addEventListener("submit", (evt) =>
-  handleConfirmDeleteCardFormSubmit(
-    evt,
-    confirmDeleteButton.getAttribute("data-card-id"),
-    apiConfig
-  )
+  handleConfirmDeleteCardFormSubmit(evt)
 );
 
 enableValidation(validationConfig);
@@ -275,39 +261,24 @@ Promise.all([getUserInfo(apiConfig), getCards(apiConfig)])
   .then(([userData, cards]) => {
     renderUserInfo(userData);
 
-    const serverCards = cards.map((serverCard) => {
-      return new Card_(
-        {
-          data: serverCard,
-          handleViewImage: handleViewImage,
-          handleUpdateLikesCount: handleUpdateLikesCount,
-          handleDeleteConfirm: () => {},
-        },
-        cardConfig
-      ).generate();
-    });
-
-    const cardList = Section(
+    const cardList = new Section(
       {
-        data: cards,
-        renderer: () => {
-          const card = new Card_(
+        renderer: (item) => {
+          const card = new Card(
             {
-              data: serverCard,
-              handleViewImage: handleViewImage,
-              handleUpdateLikesCount: handleUpdateLikesCount,
-              handleDeleteConfirm: () => {},
+              data: item,
+              handleViewImage,
+              handleUpdateLikesCount,
+              handleOpenConfirmDelete,
             },
             cardConfig
           );
-          const cardElement = card.generate();
-          cardList.setItem(cardElement);
+          cardList.addItem(card.generate());
         },
       },
-
+      cardConfig.containerSelector
     );
-
-    renderAllCards(cards);
+    cardList.render("cardList", cards);
   })
   .catch((err) => console.log(err))
   .finally(() => renderLoading(false));
