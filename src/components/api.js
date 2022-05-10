@@ -15,6 +15,29 @@ export default class Api {
     })
       .then(this._checkResponse)
   }
+  
+  setUserInfo (data) {
+    return fetch(this._url + '/users/me', {
+      method: 'PATCH',
+      headers: this._headers,
+      body: JSON.stringify({
+        name: data.name,
+        about: data.about
+      }),
+    })
+    .then(this._checkResponse);
+  };
+
+  updateUserAvatar (data) {
+    return fetch(this._url + '/users/me/avatar', {
+      method: 'PATCH',
+      headers: this._headers,
+      body: JSON.stringify({
+        avatar: data.avatar
+      }),
+    })
+    .then(this._checkResponse);
+  };
 
   getData() {
     return Promise.all([this._getUserInfo()]) // добавить карточки
@@ -37,13 +60,13 @@ const getCards = (config) => {
 //   }).then(checkResponse);
 // };
 
-const editUserInfo = (data, config) => {
-  return fetch(`${config.baseUrl}/users/me`, {
-    method: "PATCH",
-    headers: config.headers,
-    body: JSON.stringify(data),
-  }).then(checkResponse);
-};
+// const editUserInfo = (data, config) => {
+//   return fetch(`${config.baseUrl}/users/me`, {
+//     method: "PATCH",
+//     headers: config.headers,
+//     body: JSON.stringify(data),
+//   }).then(checkResponse);
+// };
 
 const addCard = (data, config) => {
   return fetch(`${config.baseUrl}/cards`, {
@@ -74,13 +97,13 @@ const deleteLike = (id, config) => {
   }).then(checkResponse);
 };
 
-const updateUserAvatar = (data, config) => {
-  return fetch(`${config.baseUrl}/users/me/avatar`, {
-    method: "PATCH",
-    headers: config.headers,
-    body: JSON.stringify(data),
-  }).then(checkResponse);
-};
+// const updateUserAvatar = (data, config) => {
+//   return fetch(`${config.baseUrl}/users/me/avatar`, {
+//     method: "PATCH",
+//     headers: config.headers,
+//     body: JSON.stringify(data),
+//   }).then(checkResponse);
+// };
 
 export {
   getCards,
@@ -89,6 +112,6 @@ export {
   addLike,
   deleteLike,
  // getUserInfo,
-  editUserInfo,
-  updateUserAvatar,
+ // editUserInfo,
+  //updateUserAvatar,
 };

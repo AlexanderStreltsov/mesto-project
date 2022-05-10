@@ -1,18 +1,21 @@
 import "../pages/index.css";
 import { openPopup, closePopup } from "./modal";
 //import { enableValidation, toogleButtonState } from "./validate"; // ed
-import { toogleButtonState } from "./validate"; // ed
+//import { toogleButtonState } from "./validate"; // ed
 import UserInfo from './UserInfo.js' // ed
+import Api from './api.js' // ed
 import FormValidator from './FormValidator.js' // ed
+import Card from "./Card";
+import Section from "./Section";
 
 import { getAllElementsBySelector, removeClassFromListElements } from "./utils";
 import {
   getCards,
   //getUserInfo, // ed
-  editUserInfo,
+  //editUserInfo,
   addCard,
   deleteCard,
-  updateUserAvatar,
+  //updateUserAvatar,
   addLike,
   deleteLike,
 } from "./api";
@@ -52,9 +55,6 @@ import {
   apiConfig_ed // ed
 } from "./constants";
 
-import Card from "./Card";
-import Section from "./Section";
-
 const changeButtonContent = (button, text, isDisabled = true) => {
   button.textContent = text;
   button.disabled = isDisabled;
@@ -70,14 +70,22 @@ const handleProfileFormSubmit = (evt) => {
     about: profileJobInput.value,
   };
 
-  editUserInfo(bodyData, apiConfig)
-    .then((profile) => {
-      currentName.textContent = profile.name;
-      currentJob.textContent = profile.about;
-      closePopup(profilePopup);
-    })
-    .catch((err) => console.log(err))
-    .finally(() => changeButtonContent(profileSubmitButton, "Сохранение"));
+  // editUserInfo(bodyData, apiConfig)
+  //   .then((profile) => {
+  //     currentName.textContent = profile.name;
+  //     currentJob.textContent = profile.about;
+  //     closePopup(profilePopup);
+  //   })
+  //   .catch((err) => console.log(err))
+  //   .finally(() => changeButtonContent(profileSubmitButton, "Сохранение"));
+
+  apiConfig_ed.setUserInfo(bodyData)
+  .then(([userData]) => {
+    userInfo.setUserInfo(userData)
+    closePopup(profilePopup);
+  })
+  .catch((err) => console.log(err))
+  .finally(() => changeButtonContent(profileSubmitButton, "Сохранение"));
 };
 
 const handleCardFormSubmit = (evt) => {
@@ -140,13 +148,22 @@ const handleAvatarFormSubmit = (evt) => {
     avatar: avatarLinkInput.value,
   };
 
-  updateUserAvatar(bodyData, apiConfig)
-    .then((profile) => {
-      avatarProfile.style.backgroundImage = `url(${profile.avatar})`;
-      closePopup(avatarPopup);
-    })
-    .catch((err) => console.log(err))
-    .finally(() => changeButtonContent(avatarSubmitButton, "Сохранить"));
+//   updateUserAvatar(bodyData, apiConfig)
+//     .then((profile) => {
+//       avatarProfile.style.backgroundImage = `url(${profile.avatar})`;
+//       closePopup(avatarPopup);
+//     })
+//     .catch((err) => console.log(err))
+//     .finally(() => changeButtonContent(avatarSubmitButton, "Сохранить"));
+// };
+
+  apiConfig_ed.updateUserAvatar(bodyData)
+  .then(([userData]) => {
+    userInfo.setUserInfo(userData)
+    closePopup(avatarPopup);
+  })
+  .catch((err) => console.log(err))
+  .finally(() => changeButtonContent(avatarSubmitButton, "Сохранить"));
 };
 
 const clearFormInputError = (popup) => {
@@ -165,33 +182,37 @@ const clearFormInputError = (popup) => {
   );
 };
 
-const openProfilePopup = () => {
-  profileNameInput.value = currentName.textContent;
-  profileJobInput.value = currentJob.textContent;
+const openProfilePopup = () => { 
+  const userData = userInfo.getUserInfo() // ed add
+  // profileNameInput.value = currentName.textContent;
+  // profileJobInput.value = currentJob.textContent;
+  profileNameInput.value = userData.name;
+  profileJobInput.value = userData.info;
+
   clearFormInputError(profilePopup);
-  toogleButtonState(
-    profilePopup,
-    [profileNameInput, profileJobInput],
-    validationConfig
-  );
+  // toogleButtonState(
+  //   profilePopup,
+  //   [profileNameInput, profileJobInput],
+  //   validationConfig
+  // );
   openPopup(profilePopup);
 };
 
 const openCardPopup = () => {
   cardForm.reset();
   clearFormInputError(popupAddCard);
-  toogleButtonState(
-    popupAddCard,
-    [cardNameInput, cardLinkInput],
-    validationConfig
-  );
+  // toogleButtonState(
+  //   popupAddCard,
+  //   [cardNameInput, cardLinkInput],
+  //   validationConfig
+  // );
   openPopup(popupAddCard);
 };
 
 const openAvatarPopup = () => {
   avatarForm.reset();
   clearFormInputError(avatarPopup);
-  toogleButtonState(avatarPopup, [avatarLinkInput], validationConfig);
+  //toogleButtonState(avatarPopup, [avatarLinkInput], validationConfig);
   openPopup(avatarPopup);
 };
 
@@ -285,7 +306,6 @@ renderLoading(true);
  apiConfig_ed.getData() 
  .then(( [userData] ) => {
    userInfo.setUserInfo(userData)
-   userId = userData._id
  })
  .catch((err) => console.log(err))
 // ed end 
