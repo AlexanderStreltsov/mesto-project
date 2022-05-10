@@ -1,125 +1,98 @@
-import {
-  cardTemplate,
-  cardsContainer,
-  currentName,
-  confirmDeletePopup,
-  confirmDeleteButton,
-  popupViewer,
-  popupViewerImage,
-  popupViewerDescription,
-  apiConfig,
-} from "./constants";
-import { addLike, deleteLike } from "./api";
-import { openPopup } from "./modal";
-import { isElementContainClass, toggleElementClass } from "./utils";
+import { profileIdKey, cardIdKey } from "./constants";
 
-const isCardOwner = (owner) => {
-  return owner === currentName.getAttribute("data-owner-id");
-};
-
-const isLikeCard = (likes) => {
-  return likes.some(
-    (item) => item._id === currentName.getAttribute("data-owner-id")
-  );
-};
-
-const handleViewImageCard = (name, link) => {
-  popupViewerImage.src = link;
-  popupViewerImage.alt = name;
-  popupViewerDescription.textContent = name;
-
-  openPopup(popupViewer);
-};
-
-const renderLikesCount = (cardLikeCount, cardLikeButton, res, config) => {
-  cardLikeCount.textContent = res.likes.length;
-  toggleElementClass(cardLikeButton, config.likeActiveClass);
-};
-
-const handleChangeLikesCount = (
-  cardId,
-  cardLikeButton,
-  cardLikeCount,
-  cardConfig,
-  apiConfig
-) => {
-  if (isElementContainClass(cardLikeButton, cardConfig.likeActiveClass)) {
-    deleteLike(cardId, apiConfig)
-      .then((res) => {
-        renderLikesCount(cardLikeCount, cardLikeButton, res, cardConfig);
-      })
-      .catch((err) => console.log(err));
-  } else {
-    addLike(cardId, apiConfig)
-      .then((res) => {
-        renderLikesCount(cardLikeCount, cardLikeButton, res, cardConfig);
-      })
-      .catch((err) => console.log(err));
-  }
-};
-
-const createCard = (id, owner, name, link, likes, config) => {
-  const cardElement = cardTemplate
-    .querySelector(config.cardSelector)
-    .cloneNode(true);
-  const cardImage = cardElement.querySelector(config.imageSelector);
-  const cardImageOverlay = cardElement.querySelector(
-    config.imageOverlaySelector
-  );
-  const cardName = cardElement.querySelector(config.nameSelector);
-  const cardLikeButton = cardElement.querySelector(config.likeSelector);
-  const cardLikeCount = cardElement.querySelector(config.likeCountSelector);
-  const deleteCardButton = cardElement.querySelector(config.deleteSelector);
-
-  cardElement.setAttribute("data-card-id", id);
-
-  cardImage.src = link;
-  cardImage.alt = name;
-  cardName.textContent = name;
-  cardLikeCount.textContent = likes.length;
-
-  if (isLikeCard(likes)) {
-    cardLikeButton.classList.add(config.likeActiveClass);
+export default class Card {
+  constructor(
+    { data, handleViewImage, handleUpdateLikesCount, handleOpenConfirmDelete },
+    config
+  ) {
+    this._config = config;
+    this._id = data._id;
+    this._name = data.name;
+    this._link = data.link;
+    this._likes = data.likes;
+    this._ownerId = data.owner._id;
+    this._handleViewImage = handleViewImage;
+    this._handleUpdateLikesCount = handleUpdateLikesCount;
+    this._handleOpenConfirmDelete = handleOpenConfirmDelete;
   }
 
-  if (isCardOwner(owner)) {
-    deleteCardButton.classList.add(config.deleteVisibleClass);
-  }
+  _setElements() {
+    this._element = document
+      .querySelector(this._config.templateSelector)
+      .content.querySelector(this._config.cardSelector)
+      .cloneNode(true);
 
-  cardImageOverlay.addEventListener("click", () => {
-    handleViewImageCard(name, link);
-  });
-
-  cardLikeButton.addEventListener("click", () => {
-    handleChangeLikesCount(
-      id,
-      cardLikeButton,
-      cardLikeCount,
-      config,
-      apiConfig
+    this._nameElement = this._element.querySelector(this._config.nameSelector);
+    this._imageElement = this._element.querySelector(
+      this._config.imageSelector
     );
-  });
-
-  deleteCardButton.addEventListener("click", () => {
-    confirmDeleteButton.setAttribute("data-card-id", id);
-    openPopup(confirmDeletePopup);
-  });
-
-  return cardElement;
-};
-
-const renderCard = (type, data) => {
-  switch (type) {
-    case "appendSomeCards":
-      data.forEach((item) => cardsContainer.append(item));
-      break;
-    case "prependOneCard":
-      cardsContainer.prepend(data);
-      break;
-    default:
-      console.log(`Insert type ${type} not in select`);
-      break;
+    this._imageOverlayElement = this._element.querySelector(
+      this._config.imageOverlaySelector
+    );
+    this._likeButtonElement = this._element.querySelector(
+      this._config.likeSelector
+    );
+    this._likeCountElement = this._element.querySelector(
+      this._config.likeCountSelector
+    );
+    this._deleteButtonElement = this._element.querySelector(
+      this._config.deleteSelector
+    );
   }
-};
 
-export { createCard, renderCard };
+  _setLikeButtonActive() {
+    if (this._likes.some((like) => like._id === this._profileId)) {
+      this._likeButtonElement.classList.add(this._config.likeActiveClass);
+    }
+  }
+
+  _setDeleteButtonVisible() {
+    if (this._ownerId === this._profileId) {
+      this._deleteButtonElement.classList.add(this._config.deleteVisibleClass);
+    }
+  }
+
+  _isLikeButtonActive() {
+    return this._likeButtonElement.classList.contains(
+      this._config.likeActiveClass
+    );
+  }
+
+  _setEventListeners() {
+    this._imageOverlayElement.addEventListener("click", () => {
+      this._handleViewImage(this._name, this._link);
+    });
+
+    this._likeButtonElement.addEventListener("click", () => {
+      this._handleUpdateLikesCount(
+        this._isLikeButtonActive(),
+        this._id,
+        this._likeCountElement,
+        this._likeButtonElement,
+        this._config.likeActiveClass
+      );
+    });
+
+    this._deleteButtonElement.addEventListener("click", () => {
+      this._handleOpenConfirmDelete(this._id);
+    });
+  }
+
+  generate() {
+    this._setElements();
+
+    this._element.setAttribute(cardIdKey, this._id);
+    this._imageElement.src = this._link;
+    this._imageElement.alt = this._name;
+    this._nameElement.textContent = this._name;
+    this._likeCountElement.textContent = this._likes.length;
+
+    this._profileId = sessionStorage.getItem(profileIdKey);
+    this._setLikeButtonActive();
+    this._setDeleteButtonVisible();
+
+    this._setEventListeners();
+
+    return this._element;
+  }
+}
