@@ -1,3 +1,26 @@
+export default class Api {
+  constructor(options) {
+    this._url = options.url
+    this._headers = options.headers
+  }
+
+  _checkResponse(res) {
+    return res.ok ? res.json() : Promise.reject(res);
+  }
+
+  _getUserInfo() {
+    return fetch(this._url + '/users/me', {
+      method: 'GET',
+      headers: this._headers
+    })
+      .then(this._checkResponse)
+  }
+
+  getData() {
+    return Promise.all([this._getUserInfo()]) // добавить карточки
+  }
+}
+
 const checkResponse = (res) => {
   return res.ok ? res.json() : Promise.reject(res);
 };
@@ -8,11 +31,11 @@ const getCards = (config) => {
   }).then(checkResponse);
 };
 
-const getUserInfo = (config) => {
-  return fetch(`${config.baseUrl}/users/me`, {
-    headers: config.headers,
-  }).then(checkResponse);
-};
+// const getUserInfo = (config) => {
+//   return fetch(`${config.baseUrl}/users/me`, {
+//     headers: config.headers,
+//   }).then(checkResponse);
+// };
 
 const editUserInfo = (data, config) => {
   return fetch(`${config.baseUrl}/users/me`, {
@@ -65,7 +88,7 @@ export {
   deleteCard,
   addLike,
   deleteLike,
-  getUserInfo,
+ // getUserInfo,
   editUserInfo,
   updateUserAvatar,
 };
