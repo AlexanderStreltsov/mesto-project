@@ -1,10 +1,14 @@
 import "../pages/index.css";
 import { openPopup, closePopup } from "./modal";
-import { enableValidation, toogleButtonState } from "./validate";
+//import { enableValidation, toogleButtonState } from "./validate"; // ed
+import { toogleButtonState } from "./validate"; // ed
+import UserInfo from './UserInfo.js' // ed
+import FormValidator from './FormValidator.js' // ed
+
 import { getAllElementsBySelector, removeClassFromListElements } from "./utils";
 import {
   getCards,
-  getUserInfo,
+  //getUserInfo, // ed
   editUserInfo,
   addCard,
   deleteCard,
@@ -45,6 +49,7 @@ import {
   popupViewerImage,
   popupViewerDescription,
   cardIdKey,
+  apiConfig_ed // ed
 } from "./constants";
 
 import Card from "./Card";
@@ -190,12 +195,30 @@ const openAvatarPopup = () => {
   openPopup(avatarPopup);
 };
 
-const renderUserInfo = (profile) => {
-  avatarProfile.style.backgroundImage = `url(${profile.avatar}`;
-  currentName.textContent = profile.name;
-  sessionStorage.setItem(profileIdKey, profile._id);
-  currentJob.textContent = profile.about;
-};
+// const renderUserInfo = (profile) => {
+//   avatarProfile.style.backgroundImage = `url(${profile.avatar}`;
+//   currentName.textContent = profile.name;
+//   sessionStorage.setItem(profileIdKey, profile._id);
+//   currentJob.textContent = profile.about;
+// };
+
+// ed begin
+const userInfo = new UserInfo ({
+  name: currentName, 
+  info: currentJob, 
+  avatar: avatarProfile
+})
+
+const profileEditFormValidator = new FormValidator(validationConfig, profileForm)
+profileEditFormValidator.enableValidation()
+
+const cardAddFormValidator = new FormValidator(validationConfig, cardForm)
+cardAddFormValidator.enableValidation()
+
+const avatarEditFromValidator = new FormValidator(validationConfig, avatarForm)
+avatarEditFromValidator.enableValidation()
+// ed end
+
 
 const handleViewImage = (name, link) => {
   popupViewerImage.src = link;
@@ -254,12 +277,22 @@ confirmDeleteForm.addEventListener("submit", (evt) =>
   handleConfirmDeleteCardFormSubmit(evt)
 );
 
-enableValidation(validationConfig);
+// enableValidation(validationConfig); // ed
 
 renderLoading(true);
-Promise.all([getUserInfo(apiConfig), getCards(apiConfig)])
-  .then(([userData, cards]) => {
-    renderUserInfo(userData);
+
+ // ed start 
+ apiConfig_ed.getData() 
+ .then(( [userData] ) => {
+   userInfo.setUserInfo(userData)
+   userId = userData._id
+ })
+ .catch((err) => console.log(err))
+// ed end 
+
+//Promise.all([getUserInfo(apiConfig_ed), getCards(apiConfig)])
+Promise.all([getCards(apiConfig)])
+  .then(([cards]) => {
 
     const cardList = new Section(
       {
