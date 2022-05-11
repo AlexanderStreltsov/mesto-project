@@ -12,10 +12,10 @@ export default class Section {
 
   render(type, data) {
     switch (type) {
-      case "cardList":
+      case "list":
         data.forEach((item) => this._renderer(item));
         break;
-      case "newCard":
+      case "element":
         this._renderer(data);
         break;
       default:

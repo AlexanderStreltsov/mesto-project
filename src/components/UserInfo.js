@@ -1,3 +1,5 @@
+import { profileIdKey } from "./constants";
+
 export default class UserInfo {
   constructor(userSelectors) {
     this._profileName = userSelectors.name;
@@ -6,6 +8,7 @@ export default class UserInfo {
   }
 
   setUserInfo(data) {
+    sessionStorage.setItem(profileIdKey, data._id);
     this._profileName.textContent = data.name;
     this._profileJob.textContent = data.about;
     this.setUserAvatar(data);
