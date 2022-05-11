@@ -1,13 +1,3 @@
-import Api from "./api.js";
-
-export const apiConfig_ed = new Api({
-  url: 'https://nomoreparties.co/v1/plus-cohort-8',
-  headers: {
-    'Content-Type': 'application/json',
-    authorization: '45def5a2-c1e5-4149-8cae-fca78747b383'
-  }
-})
-
 const apiConfig = {
   baseUrl: "https://nomoreparties.co/v1/plus-cohort-8",
   headers: {
@@ -55,6 +45,10 @@ const popupAddCardConfig = {
 
 const popupAvatarConfig = {
   popupSelector: "#edit-avatar-popup",
+};
+
+const popupProfileConfig = {
+  popupSelector: "#edit-popup",
 }
 
 const profileIdKey = "data-profile-id";
@@ -121,5 +115,6 @@ export {
   cardIdKey,
   popupWithImageConfig,
   popupAddCardConfig,
-  popupAvatarConfig
+  popupAvatarConfig,
+  popupProfileConfig,
 };

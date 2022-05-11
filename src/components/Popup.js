@@ -7,7 +7,7 @@ export default class Popup {
     if (evt.key === "Escape") {
       this.close();
     }
-  }
+  };
 
   _handlePopupClick = (evt) => {
     const elementClasses = evt.target.classList;
@@ -17,7 +17,7 @@ export default class Popup {
     ) {
       this.close();
     }
-  }
+  };
 
   _setEventListeners() {
     document.addEventListener("keydown", this._handleEscapeKey);

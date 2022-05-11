@@ -1,5 +1,5 @@
-import Popup from "./Popup.js";
-import { validationConfig } from "./constants.js";
+import Popup from "./Popup";
+import { validationConfig } from "./constants";
 import {
   getAllElementsBySelector,
   removeClassFromListElements,
@@ -61,11 +61,7 @@ export default class PopupWithForm extends Popup {
   }
 
   open() {
-    this._toogleSubmitButtonState(
-      this._popupElement,
-      this._getInputElements(),
-      validationConfig
-    );
+    this._toogleSubmitButtonState();
     super.open();
   }
 
