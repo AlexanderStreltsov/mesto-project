@@ -2,7 +2,12 @@ import { profileIdKey, cardIdKey } from "./constants";
 
 export default class Card {
   constructor(
-    { data, handleViewImage, handleUpdateLikesCount, handleOpenConfirmDelete },
+    {
+      data,
+      handleOpenCardImage,
+      handleUpdateCardLikesCount,
+      handleOpenConfirmDeleteCard,
+    },
     config
   ) {
     this._config = config;
@@ -11,9 +16,9 @@ export default class Card {
     this._link = data.link;
     this._likes = data.likes;
     this._ownerId = data.owner._id;
-    this._handleViewImage = handleViewImage;
-    this._handleUpdateLikesCount = handleUpdateLikesCount;
-    this._handleOpenConfirmDelete = handleOpenConfirmDelete;
+    this._handleCardClick = handleOpenCardImage;
+    this._handleLikeClick = handleUpdateCardLikesCount;
+    this._handleDeleteIconClick = handleOpenConfirmDeleteCard;
   }
 
   _setElements() {
@@ -60,11 +65,11 @@ export default class Card {
 
   _setEventListeners() {
     this._imageOverlayElement.addEventListener("click", () => {
-      this._handleViewImage(this._name, this._link);
+      this._handleCardClick(this._name, this._link);
     });
 
     this._likeButtonElement.addEventListener("click", () => {
-      this._handleUpdateLikesCount(
+      this._handleLikeClick(
         this._isLikeButtonActive(),
         this._id,
         this._likeCountElement,
@@ -74,7 +79,7 @@ export default class Card {
     });
 
     this._deleteButtonElement.addEventListener("click", () => {
-      this._handleOpenConfirmDelete(this._id);
+      this._handleDeleteIconClick(this._id);
     });
   }
 

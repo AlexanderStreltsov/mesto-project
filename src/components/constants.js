@@ -1,4 +1,3 @@
-// ed start
 import Api from "./api.js";
 
 export const apiConfig_ed = new Api({
@@ -8,7 +7,6 @@ export const apiConfig_ed = new Api({
     authorization: '45def5a2-c1e5-4149-8cae-fca78747b383'
   }
 })
-// ed end
 
 const apiConfig = {
   baseUrl: "https://nomoreparties.co/v1/plus-cohort-8",
@@ -45,6 +43,20 @@ const cardConfig = {
   imageOverlaySelector: ".cards__overlay",
 };
 
+const popupWithImageConfig = {
+  popupSelector: "#image-viewer-popup",
+  viewerImageSelector: ".image-viewer__picture",
+  viewerDescriptionSelector: ".image-viewer__caption",
+};
+
+const popupAddCardConfig = {
+  popupSelector: "#add-popup",
+};
+
+const popupAvatarConfig = {
+  popupSelector: "#edit-avatar-popup",
+}
+
 const profileIdKey = "data-profile-id";
 const cardIdKey = "data-card-id";
 
@@ -57,20 +69,12 @@ const profileNameInput = profilePopup.querySelector("#title");
 const profileJobInput = profilePopup.querySelector("#job");
 const profileSubmitButton = profileForm.querySelector(".form__button");
 
-const cardTemplate = document.querySelector("#card-template").content;
-const cardsContainer = document.querySelector(".cards__list");
 const cardAddButton = document.querySelector(".profile__add-button");
 const popupAddCard = document.querySelector("#add-popup");
 const cardForm = popupAddCard.querySelector(".form");
 const cardNameInput = popupAddCard.querySelector("#name-card");
 const cardLinkInput = popupAddCard.querySelector("#link-img-card");
 const cardSubmitButton = popupAddCard.querySelector(".form__button");
-
-const popupViewer = document.querySelector("#image-viewer-popup");
-const popupViewerImage = popupViewer.querySelector(".image-viewer__picture");
-const popupViewerDescription = popupViewer.querySelector(
-  ".image-viewer__caption"
-);
 
 const avatarProfile = document.querySelector(".profile__avatar");
 const avatarPopup = document.querySelector("#edit-avatar-popup");
@@ -95,7 +99,6 @@ export {
   profileNameInput,
   profileJobInput,
   profileSubmitButton,
-  cardsContainer,
   cardAddButton,
   popupAddCard,
   cardForm,
@@ -112,12 +115,11 @@ export {
   confirmDeletePopup,
   confirmDeleteForm,
   confirmDeleteButton,
-  popupViewer,
-  popupViewerImage,
-  popupViewerDescription,
-  cardTemplate,
   spinner,
   content,
   profileIdKey,
   cardIdKey,
+  popupWithImageConfig,
+  popupAddCardConfig,
+  popupAvatarConfig
 };
