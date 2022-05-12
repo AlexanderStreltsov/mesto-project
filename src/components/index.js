@@ -5,33 +5,31 @@ import Card from "./Card";
 import Section from "./Section";
 import PopupWithForm from "./PopupWithForm";
 import PopupWithImage from "./PopupWithImage";
-import { Api } from "./Api.js";
-import PopupWithConfirm from "./PopupWithConfirm.js";
+import Api from "./Api";
+import PopupWithConfirm from "./PopupWithConfirm";
 import {
-  cardConfig,
-  currentName,
-  currentJob,
-  profileEditButton,
-  profileForm,
-  profileNameInput,
-  profileJobInput,
-  cardAddButton,
-  validationConfig,
   apiConfig,
-  avatarProfile,
-  confirmDeletePopup,
-  confirmDeleteForm,
-  confirmDeleteButton,
-  spinner,
-  content,
-  cardIdKey,
-  cardForm,
-  avatarForm,
+  cardConfig,
+  validationConfig,
   popupWithImageConfig,
   popupAddCardConfig,
   popupAvatarConfig,
   popupProfileConfig,
   popupConfirmDeleteConfig,
+  avatarProfile,
+  currentName,
+  currentJob,
+  cardForm,
+  avatarForm,
+  profileForm,
+  profileNameInput,
+  profileJobInput,
+  profileEditButton,
+  cardAddButton,
+  confirmDeleteButton,
+  spinner,
+  content,
+  cardIdKey,
 } from "./constants";
 
 const changeButtonContent = (button, text, isDisabled = true) => {
@@ -49,7 +47,7 @@ const handleProfileFormSubmit = (evt, submitButton) => {
       popupProfile.close();
     })
     .catch((err) => console.log(err))
-    .finally(() => changeButtonContent(submitButton, "Сохранение"));
+    .finally(() => changeButtonContent(submitButton, "Сохранить"));
 };
 
 const handleCardFormSubmit = (evt, submitButton) => {
@@ -230,10 +228,6 @@ const popupProfile = new PopupWithForm(
 profileEditButton.addEventListener("click", () => popupProfile.open());
 cardAddButton.addEventListener("click", () => popupAddCard.open());
 avatarProfile.addEventListener("click", () => popupAvatar.open());
-
-confirmDeleteForm.addEventListener("submit", (evt) =>
-  handleConfirmDeleteCardFormSubmit(evt)
-);
 
 renderLoading(true);
 Promise.all([api.getCards(), api.getUserInfo()])
