@@ -17,3 +17,7 @@
 ### Ссылка на проект
 [Сайт "Mesto"](https://alexanderstreltsov.github.io/mesto-project/)
 
+### Командная работа
+Почта второго напарника: ya.ed.ka@yandex.ru
+Github: https://github.com/yaedka
+
