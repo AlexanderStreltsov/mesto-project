@@ -1,12 +1,12 @@
 import "../pages/index.css";
-import { openPopup, closePopup } from "./modal";
 import UserInfo from "./UserInfo";
 import FormValidator from "./FormValidator";
 import Card from "./Card";
 import Section from "./Section";
 import PopupWithForm from "./PopupWithForm";
 import PopupWithImage from "./PopupWithImage";
-import { Api, getCards, addCard, deleteCard, addLike, deleteLike } from "./Api";
+import { Api } from "./Api.js";
+import PopupWithConfirm from "./PopupWithConfirm.js";
 import {
   cardConfig,
   currentName,
@@ -31,6 +31,7 @@ import {
   popupAddCardConfig,
   popupAvatarConfig,
   popupProfileConfig,
+  popupConfirmDeleteConfig,
 } from "./constants";
 
 const changeButtonContent = (button, text, isDisabled = true) => {
@@ -55,7 +56,8 @@ const handleCardFormSubmit = (evt, submitButton) => {
   evt.preventDefault();
   changeButtonContent(submitButton, "Сохранение...");
 
-  addCard(popupAddCard._getInputValues(), apiConfig)
+  api
+    .addCard(popupAddCard._getInputValues())
     .then((serverCard) => {
       const cardElement = new Section(
         {
@@ -88,10 +90,11 @@ const handleConfirmDeleteCardFormSubmit = (evt) => {
   changeButtonContent(confirmDeleteButton, "Удаление...");
 
   const cardId = sessionStorage.getItem(cardIdKey);
-  deleteCard(cardId, apiConfig)
+  api
+    .deleteCard(cardId)
     .then(() => {
       document.querySelector(`[${cardIdKey}="${cardId}"]`).remove();
-      closePopup(confirmDeletePopup);
+      popupWithConfirm.close();
     })
     .catch((err) => console.log(err))
     .finally(() => changeButtonContent(confirmDeleteButton, "Да", false));
@@ -119,14 +122,16 @@ const handleUpdateCardLikesCount = (
   likeActiveClassName
 ) => {
   if (isLike) {
-    deleteLike(cardId, apiConfig)
+    api
+      .deleteLike(cardId)
       .then((res) => {
         likeCountElement.textContent = res.likes.length;
         likeButtonElement.classList.toggle(likeActiveClassName);
       })
       .catch((err) => console.log(err));
   } else {
-    addLike(cardId, apiConfig)
+    api
+      .addLike(cardId)
       .then((res) => {
         likeCountElement.textContent = res.likes.length;
         likeButtonElement.classList.toggle(likeActiveClassName);
@@ -137,7 +142,7 @@ const handleUpdateCardLikesCount = (
 
 const handleOpenConfirmDeleteCard = (cardId) => {
   sessionStorage.setItem(cardIdKey, cardId);
-  openPopup(confirmDeletePopup);
+  popupWithConfirm.open();
 };
 
 const handleOpenCardImage = (name, link) => {
@@ -191,6 +196,13 @@ avatarEditFromValidator.enableValidation();
 
 const popupWithImage = new PopupWithImage(popupWithImageConfig);
 
+const popupWithConfirm = new PopupWithConfirm(
+  {
+    handleFormSubmit: handleConfirmDeleteCardFormSubmit,
+  },
+  popupConfirmDeleteConfig
+);
+
 const popupAddCard = new PopupWithForm(
   {
     handleFormSubmit: handleCardFormSubmit,
@@ -224,9 +236,9 @@ confirmDeleteForm.addEventListener("submit", (evt) =>
 );
 
 renderLoading(true);
-Promise.all([getCards(apiConfig), api.getData()])
+Promise.all([api.getCards(), api.getUserInfo()])
   .then(([cards, userData]) => {
-    userInfo.setUserInfo(...userData);
+    userInfo.setUserInfo(userData);
 
     const cardList = new Section(
       {

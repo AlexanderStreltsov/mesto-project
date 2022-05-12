@@ -49,7 +49,11 @@ const popupAvatarConfig = {
 
 const popupProfileConfig = {
   popupSelector: "#edit-popup",
-}
+};
+
+const popupConfirmDeleteConfig = {
+  popupSelector: "#confirm-action",
+};
 
 const profileIdKey = "data-profile-id";
 const cardIdKey = "data-card-id";
@@ -117,4 +121,5 @@ export {
   popupAddCardConfig,
   popupAvatarConfig,
   popupProfileConfig,
+  popupConfirmDeleteConfig,
 };
