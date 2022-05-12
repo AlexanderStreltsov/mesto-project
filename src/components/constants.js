@@ -65,61 +65,43 @@ const profilePopup = document.querySelector("#edit-popup");
 const profileForm = profilePopup.querySelector(".form");
 const profileNameInput = profilePopup.querySelector("#title");
 const profileJobInput = profilePopup.querySelector("#job");
-const profileSubmitButton = profileForm.querySelector(".form__button");
 
 const cardAddButton = document.querySelector(".profile__add-button");
 const popupAddCard = document.querySelector("#add-popup");
 const cardForm = popupAddCard.querySelector(".form");
-const cardNameInput = popupAddCard.querySelector("#name-card");
-const cardLinkInput = popupAddCard.querySelector("#link-img-card");
-const cardSubmitButton = popupAddCard.querySelector(".form__button");
 
 const avatarProfile = document.querySelector(".profile__avatar");
 const avatarPopup = document.querySelector("#edit-avatar-popup");
 const avatarForm = avatarPopup.querySelector(".form");
-const avatarLinkInput = avatarPopup.querySelector("#url-avatar");
-const avatarSubmitButton = avatarPopup.querySelector(".form__button");
 
 const confirmDeletePopup = document.querySelector("#confirm-action");
-const confirmDeleteForm = confirmDeletePopup.querySelector(".form");
 const confirmDeleteButton = confirmDeletePopup.querySelector(".form__button");
 
 const spinner = document.querySelector(".spinner");
 const content = document.querySelector(".content");
 
 export {
-  cardConfig,
-  currentName,
-  currentJob,
-  profileEditButton,
-  profilePopup,
-  profileForm,
-  profileNameInput,
-  profileJobInput,
-  profileSubmitButton,
-  cardAddButton,
-  popupAddCard,
-  cardForm,
-  cardNameInput,
-  cardLinkInput,
-  cardSubmitButton,
-  validationConfig,
   apiConfig,
-  avatarProfile,
-  avatarPopup,
-  avatarForm,
-  avatarLinkInput,
-  avatarSubmitButton,
-  confirmDeletePopup,
-  confirmDeleteForm,
-  confirmDeleteButton,
-  spinner,
-  content,
-  profileIdKey,
-  cardIdKey,
+  cardConfig,
+  validationConfig,
   popupWithImageConfig,
   popupAddCardConfig,
   popupAvatarConfig,
   popupProfileConfig,
   popupConfirmDeleteConfig,
+  avatarProfile,
+  currentName,
+  currentJob,
+  cardForm,
+  avatarForm,
+  profileForm,
+  profileNameInput,
+  profileJobInput,
+  profileEditButton,
+  cardAddButton,
+  confirmDeleteButton,
+  spinner,
+  content,
+  cardIdKey,
+  profileIdKey,
 };
