@@ -51,16 +51,16 @@ export default class Card {
     }
   }
 
+  isLikeButtonActive() {
+    return this._likeButtonElement.classList.contains(
+      this._config.likeActiveClass
+    );
+  }
+
   _setDeleteButtonVisible() {
     if (this._ownerId === this._profileId) {
       this._deleteButtonElement.classList.add(this._config.deleteVisibleClass);
     }
-  }
-
-  _isLikeButtonActive() {
-    return this._likeButtonElement.classList.contains(
-      this._config.likeActiveClass
-    );
   }
 
   _setEventListeners() {
@@ -69,13 +69,7 @@ export default class Card {
     });
 
     this._likeButtonElement.addEventListener("click", () => {
-      this._handleLikeClick(
-        this._isLikeButtonActive(),
-        this._id,
-        this._likeCountElement,
-        this._likeButtonElement,
-        this._config.likeActiveClass
-      );
+      this._handleLikeClick(this);
     });
 
     this._deleteButtonElement.addEventListener("click", () => {
