@@ -1,11 +1,11 @@
 # Проектная работа "Mesto"
 
-### Командная работа (8 поток)
+### Командная работа
 
+**8 поток**<br/>
+<br/>
 **Александр Стрельцов**<br/>
-**Эд Касимов**
->ya.ed.ka@yandex.ru,<br/>
->[github](https://github.com/yaedka/)<br/>
+**Эд Касимов** (ya.ed.ka@yandex.ru, [github](https://github.com/yaedka/))
 
 ### Обзор
 
