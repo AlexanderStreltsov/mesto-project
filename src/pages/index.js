@@ -91,18 +91,16 @@ const handleOpenConfirmDeleteCard = (cardId) => {
 const handleUpdateCardLikesCount = (card) => {
   if (card.isLikeButtonActive()) {
     api
-      .deleteLike(card._id)
+      .deleteLike(card.getCardId())
       .then((res) => {
-        card._likeCountElement.textContent = res.likes.length;
-        card._likeButtonElement.classList.toggle(card._config.likeActiveClass);
+        card.changeLikeCount(res);
       })
       .catch((err) => console.log(err));
   } else {
     api
-      .addLike(card._id)
+      .addLike(card.getCardId())
       .then((res) => {
-        card._likeCountElement.textContent = res.likes.length;
-        card._likeButtonElement.classList.toggle(card._config.likeActiveClass);
+        card.changeLikeCount(res);
       })
       .catch((err) => console.log(err));
   }

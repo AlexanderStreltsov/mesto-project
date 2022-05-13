@@ -51,12 +51,6 @@ export default class Card {
     }
   }
 
-  isLikeButtonActive() {
-    return this._likeButtonElement.classList.contains(
-      this._config.likeActiveClass
-    );
-  }
-
   _setDeleteButtonVisible() {
     if (this._ownerId === this._profileId) {
       this._deleteButtonElement.classList.add(this._config.deleteVisibleClass);
@@ -75,6 +69,21 @@ export default class Card {
     this._deleteButtonElement.addEventListener("click", () => {
       this._handleDeleteIconClick(this._id);
     });
+  }
+
+  isLikeButtonActive() {
+    return this._likeButtonElement.classList.contains(
+      this._config.likeActiveClass
+    );
+  }
+
+  getCardId() {
+    return this._id;
+  }
+
+  changeLikeCount(data) {
+    this._likeCountElement.textContent = data.likes.length;
+    this._likeButtonElement.classList.toggle(this._config.likeActiveClass);
   }
 
   generate() {
