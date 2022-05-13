@@ -2,11 +2,10 @@
 
 ### Командная работа
 
-**Александр Стрельцов, Эд Касимов**<br/>
+**Александр Стрельцов**,<br/>
+**Эд Касимов (ya.ed.ka@yandex.ru, [github]]: (https://github.com/yaedka/))**<br/>
+<br/>
 **8 поток**
-
-Почта второго напарника: ya.ed.ka@yandex.ru<br/>
-Github: https://github.com/yaedka
 
 ### Обзор
 
