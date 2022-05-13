@@ -1,4 +1,4 @@
-import { profileIdKey, cardIdKey } from "./constants";
+import { profileIdKey, cardIdKey } from "../utils/constants";
 
 export default class Card {
   constructor(

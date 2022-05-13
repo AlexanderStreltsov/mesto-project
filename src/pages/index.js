@@ -1,12 +1,12 @@
-import "../pages/index.css";
-import UserInfo from "./UserInfo";
-import FormValidator from "./FormValidator";
-import Card from "./Card";
-import Section from "./Section";
-import PopupWithForm from "./PopupWithForm";
-import PopupWithImage from "./PopupWithImage";
-import Api from "./Api";
-import PopupWithConfirm from "./PopupWithConfirm";
+import "./index.css";
+import UserInfo from "../components/UserInfo";
+import FormValidator from "../components/FormValidator";
+import Card from "../components/Card";
+import Section from "../components/Section";
+import PopupWithForm from "../components/PopupWithForm";
+import PopupWithImage from "../components/PopupWithImage";
+import Api from "../components/Api";
+import PopupWithConfirm from "../components/PopupWithConfirm";
 import {
   apiConfig,
   cardConfig,
@@ -30,7 +30,7 @@ import {
   spinner,
   content,
   cardIdKey,
-} from "./constants";
+} from "../utils/constants";
 
 const changeButtonContent = (button, text, isDisabled = true) => {
   button.textContent = text;
@@ -88,10 +88,14 @@ const handleConfirmDeleteCardFormSubmit = (evt) => {
   changeButtonContent(confirmDeleteButton, "Удаление...");
 
   const cardId = sessionStorage.getItem(cardIdKey);
+  console.log(cardId)
   api
     .deleteCard(cardId)
     .then(() => {
-      document.querySelector(`[${cardIdKey}="${cardId}"]`).remove();
+      const cardToDelete = document.querySelector(`[${cardIdKey}="${cardId}"]`);
+      if (!!cardToDelete) {
+        cardToDelete.remove();
+      }
       popupWithConfirm.close();
     })
     .catch((err) => console.log(err))

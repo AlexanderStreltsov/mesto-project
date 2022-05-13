@@ -1,4 +1,4 @@
-import { profileIdKey } from "./constants";
+import { profileIdKey } from "../utils/constants";
 
 export default class UserInfo {
   constructor(userSelectors) {
