@@ -19,6 +19,7 @@ export default class Card {
     this._handleCardClick = handleOpenCardImage;
     this._handleLikeClick = handleUpdateCardLikesCount;
     this._handleDeleteIconClick = handleOpenConfirmDeleteCard;
+    this._profileId = sessionStorage.getItem(profileIdKey);
   }
 
   _setElements() {
@@ -57,30 +58,33 @@ export default class Card {
     }
   }
 
-  _isLikeButtonActive() {
-    return this._likeButtonElement.classList.contains(
-      this._config.likeActiveClass
-    );
-  }
-
   _setEventListeners() {
     this._imageOverlayElement.addEventListener("click", () => {
       this._handleCardClick(this._name, this._link);
     });
 
     this._likeButtonElement.addEventListener("click", () => {
-      this._handleLikeClick(
-        this._isLikeButtonActive(),
-        this._id,
-        this._likeCountElement,
-        this._likeButtonElement,
-        this._config.likeActiveClass
-      );
+      this._handleLikeClick(this);
     });
 
     this._deleteButtonElement.addEventListener("click", () => {
       this._handleDeleteIconClick(this._id);
     });
+  }
+
+  isLikeButtonActive() {
+    return this._likeButtonElement.classList.contains(
+      this._config.likeActiveClass
+    );
+  }
+
+  getCardId() {
+    return this._id;
+  }
+
+  changeLikeCount(data) {
+    this._likeCountElement.textContent = data.likes.length;
+    this._likeButtonElement.classList.toggle(this._config.likeActiveClass);
   }
 
   generate() {
@@ -92,10 +96,8 @@ export default class Card {
     this._nameElement.textContent = this._name;
     this._likeCountElement.textContent = this._likes.length;
 
-    this._profileId = sessionStorage.getItem(profileIdKey);
     this._setLikeButtonActive();
     this._setDeleteButtonVisible();
-
     this._setEventListeners();
 
     return this._element;
