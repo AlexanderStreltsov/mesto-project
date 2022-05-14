@@ -1,10 +1,13 @@
-# Проектная работа "Mesto"
+# Командная проектная работа "Mesto"
 
-### Командная работа
+### Команда (8 поток)
 
-#### 8 поток
 **Александр Стрельцов**<br/>
 **Эд Касимов** (ya.ed.ka@yandex.ru, [github](https://github.com/yaedka/))
+
+### Ссылка на проект
+
+[Сайт "Mesto"](https://alexanderstreltsov.github.io/mesto-project/)
 
 ### Обзор
 
@@ -23,7 +26,3 @@
 - работа с api.
 
 Командная работа по рефакторнигу кода на классовый подход к разработке (ООП).
-
-### Ссылка на проект
-
-[Сайт "Mesto"](https://alexanderstreltsov.github.io/mesto-project/)
