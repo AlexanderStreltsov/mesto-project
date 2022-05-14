@@ -16,7 +16,7 @@ export default class PopupWithForm extends PopupWithConfirm {
       return acc;
     }, {});
   }
-
+  
   setInputValues(data) {
     this._inputList.forEach((input) => {
       input.value = data[input.name];

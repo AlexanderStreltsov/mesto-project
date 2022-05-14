@@ -209,19 +209,17 @@ const popupCardImageViewer = new PopupWithImage(popupWithImageConfig);
 
 profileEditButton.addEventListener("click", () => {
   popupProfile.setInputValues(userInfo.getUserInfo());
-  // <-- в этой строке нужно запустить и предварительно написать метод resetValidation() в классе валидации
-  // в нем будет вызываться метод по смене статуса кнопки сабмита _toggleButtonState
-  // также нужно пройтись по всем инпутам и очистить показанные ошибки (перед открытием попапа)
+  profileEditFormValidator.resetValidation();
   popupProfile.open();
 });
 
 cardAddButton.addEventListener("click", () => {
-  // <-- в этой строке нужно запустить и предварительно написать метод resetValidation() в классе валидации
+  cardAddFormValidator.resetValidation();
   popupAddCard.open();
 });
 
 avatarProfile.addEventListener("click", () => {
-  // <-- в этой строке нужно запустить и предварительно написать метод resetValidation() в классе валидации
+  avatarEditFromValidator.resetValidation();
   popupAvatar.open();
 });
 
