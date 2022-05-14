@@ -22,73 +22,54 @@ import {
   cardForm,
   avatarForm,
   profileForm,
-  profileNameInput,
-  profileJobInput,
   profileEditButton,
   cardAddButton,
-  confirmDeleteButton,
   spinner,
   content,
   cardIdKey,
 } from "../utils/constants";
 
-const changeButtonContent = (button, text, isDisabled = true) => {
-  button.textContent = text;
-  button.disabled = isDisabled;
-};
-
-const handleProfileFormSubmit = (evt, submitButton) => {
-  evt.preventDefault();
-  changeButtonContent(submitButton, "Сохранение...");
+const handleProfileFormSubmit = () => {
+  popupProfile.renderLoading(true, "Сохранение...");
   api
-    .setUserInfo(popupProfile._getInputValues())
+    .setUserInfo(popupProfile.getInputValues())
     .then((userData) => {
       userInfo.setUserInfo(userData);
       popupProfile.close();
     })
     .catch((err) => console.log(err))
-    .finally(() => changeButtonContent(submitButton, "Сохранить"));
+    .finally(() => popupProfile.renderLoading(false, "Сохранить"));
 };
 
-const handleCardFormSubmit = (evt, submitButton) => {
-  evt.preventDefault();
-  changeButtonContent(submitButton, "Сохранение...");
-
+const handleAvatarFormSubmit = () => {
+  popupAvatar.renderLoading(true, "Сохранение...");
   api
-    .addCard(popupAddCard._getInputValues())
+    .updateUserAvatar(popupAvatar.getInputValues())
+    .then((userData) => {
+      userInfo.setUserInfo(userData);
+      popupAvatar.close();
+    })
+    .catch((err) => console.log(err))
+    .finally(() => popupAvatar.renderLoading(false, "Сохранить"));
+};
+
+const handleCardFormSubmit = () => {
+  popupAddCard.renderLoading(true, "Создание...");
+  api
+    .addCard(popupAddCard.getInputValues())
     .then((serverCard) => {
-      const cardElement = new Section(
-        {
-          renderer: (item) => {
-            const card = new Card(
-              {
-                data: item,
-                handleOpenCardImage,
-                handleUpdateCardLikesCount,
-                handleOpenConfirmDeleteCard,
-              },
-              cardConfig
-            );
-            cardElement.addItem(card.generate(), "before");
-          },
-        },
-        cardConfig.containerSelector
-      );
       cardElement.render("element", serverCard);
       popupAddCard.close();
     })
     .catch((err) => console.log(err))
     .finally(() => {
-      changeButtonContent(submitButton, "Создать");
+      popupAddCard.renderLoading(false, "Создать");
     });
 };
 
-const handleConfirmDeleteCardFormSubmit = (evt) => {
-  evt.preventDefault();
-  changeButtonContent(confirmDeleteButton, "Удаление...");
-
+const handleConfirmDeleteCardFormSubmit = () => {
+  popupConfirmDeleteCard.renderLoading(true, "Удаление...");
   const cardId = sessionStorage.getItem(cardIdKey);
-  console.log(cardId)
   api
     .deleteCard(cardId)
     .then(() => {
@@ -96,77 +77,40 @@ const handleConfirmDeleteCardFormSubmit = (evt) => {
       if (!!cardToDelete) {
         cardToDelete.remove();
       }
-      popupWithConfirm.close();
+      popupConfirmDeleteCard.close();
     })
     .catch((err) => console.log(err))
-    .finally(() => changeButtonContent(confirmDeleteButton, "Да", false));
+    .finally(() => popupConfirmDeleteCard.renderLoading(false));
 };
 
-const handleAvatarFormSubmit = (evt, submitButton) => {
-  evt.preventDefault();
-  changeButtonContent(submitButton, "Сохранение...");
-
-  api
-    .updateUserAvatar(popupAvatar._getInputValues())
-    .then((userData) => {
-      userInfo.setUserInfo(userData);
-      popupAvatar.close();
-    })
-    .catch((err) => console.log(err))
-    .finally(() => changeButtonContent(submitButton, "Сохранить"));
+const handleOpenConfirmDeleteCard = (cardId) => {
+  sessionStorage.setItem(cardIdKey, cardId);
+  popupConfirmDeleteCard.open();
 };
 
-const handleUpdateCardLikesCount = (
-  isLike,
-  cardId,
-  likeCountElement,
-  likeButtonElement,
-  likeActiveClassName
-) => {
-  if (isLike) {
+const handleUpdateCardLikesCount = (card) => {
+  if (card.isLikeButtonActive()) {
     api
-      .deleteLike(cardId)
+      .deleteLike(card.getCardId())
       .then((res) => {
-        likeCountElement.textContent = res.likes.length;
-        likeButtonElement.classList.toggle(likeActiveClassName);
+        card.changeLikeCount(res);
       })
       .catch((err) => console.log(err));
   } else {
     api
-      .addLike(cardId)
+      .addLike(card.getCardId())
       .then((res) => {
-        likeCountElement.textContent = res.likes.length;
-        likeButtonElement.classList.toggle(likeActiveClassName);
+        card.changeLikeCount(res);
       })
       .catch((err) => console.log(err));
   }
 };
 
-const handleOpenConfirmDeleteCard = (cardId) => {
-  sessionStorage.setItem(cardIdKey, cardId);
-  popupWithConfirm.open();
-};
-
 const handleOpenCardImage = (name, link) => {
-  popupWithImage.open(name, link);
+  popupCardImageViewer.open(name, link);
 };
 
-const checkCardSubmitButtonState = () => {
-  cardAddFormValidator.toogleButtonState();
-};
-
-const checkAvatarSubmitButtonState = () => {
-  avatarEditFromValidator.toogleButtonState();
-};
-
-const checkProfileSubmitButtonState = () => {
-  const userData = userInfo.getUserInfo();
-  profileNameInput.value = userData.name;
-  profileJobInput.value = userData.info;
-  profileEditFormValidator.toogleButtonState();
-};
-
-function renderLoading(isLoading) {
+function renderLoading(isLoading = true) {
   if (isLoading) {
     spinner.classList.add("spinner_visible");
     content.classList.add("content_hidden");
@@ -178,11 +122,52 @@ function renderLoading(isLoading) {
 
 const api = new Api(apiConfig);
 
+// сможешь здесь передавать конфигурацию с селекторами -
+// эту конфигурацию нужно определять в константах по аналогии с cardConfig или apiConfig
+// назвать к примеру userConfig
+// а элементы внутри класса искать в конструкторе класса по этим селекторам
+// будет типа = new UserInfo(userConfig)
 const userInfo = new UserInfo({
   name: currentName,
   info: currentJob,
   avatar: avatarProfile,
 });
+
+const cardElement = new Section(
+  {
+    renderer: (item) => {
+      const card = new Card(
+        {
+          data: item,
+          handleOpenCardImage,
+          handleUpdateCardLikesCount,
+          handleOpenConfirmDeleteCard,
+        },
+        cardConfig
+      );
+      cardElement.addItem(card.generate(), "before");
+    },
+  },
+  cardConfig.containerSelector
+);
+
+const cardList = new Section(
+  {
+    renderer: (item) => {
+      const card = new Card(
+        {
+          data: item,
+          handleOpenCardImage,
+          handleUpdateCardLikesCount,
+          handleOpenConfirmDeleteCard,
+        },
+        cardConfig
+      );
+      cardList.addItem(card.generate());
+    },
+  },
+  cardConfig.containerSelector
+);
 
 const profileEditFormValidator = new FormValidator(
   validationConfig,
@@ -196,65 +181,54 @@ cardAddFormValidator.enableValidation();
 const avatarEditFromValidator = new FormValidator(validationConfig, avatarForm);
 avatarEditFromValidator.enableValidation();
 
-const popupWithImage = new PopupWithImage(popupWithImageConfig);
-
-const popupWithConfirm = new PopupWithConfirm(
-  {
-    handleFormSubmit: handleConfirmDeleteCardFormSubmit,
-  },
-  popupConfirmDeleteConfig
-);
-
-const popupAddCard = new PopupWithForm(
-  {
-    handleFormSubmit: handleCardFormSubmit,
-    toogleSubmitButtonState: checkCardSubmitButtonState,
-  },
-  popupAddCardConfig
-);
-
 const popupAvatar = new PopupWithForm(
-  {
-    handleFormSubmit: handleAvatarFormSubmit,
-    toogleSubmitButtonState: checkAvatarSubmitButtonState,
-  },
+  { handleFormSubmit: handleAvatarFormSubmit },
   popupAvatarConfig
 );
-
 const popupProfile = new PopupWithForm(
-  {
-    handleFormSubmit: handleProfileFormSubmit,
-    toogleSubmitButtonState: checkProfileSubmitButtonState,
-  },
+  { handleFormSubmit: handleProfileFormSubmit },
   popupProfileConfig
 );
+const popupAddCard = new PopupWithForm(
+  { handleFormSubmit: handleCardFormSubmit },
+  popupAddCardConfig
+);
+const popupConfirmDeleteCard = new PopupWithConfirm(
+  { handleFormSubmit: handleConfirmDeleteCardFormSubmit },
+  popupConfirmDeleteConfig
+);
+const popupCardImageViewer = new PopupWithImage(popupWithImageConfig);
 
-profileEditButton.addEventListener("click", () => popupProfile.open());
-cardAddButton.addEventListener("click", () => popupAddCard.open());
-avatarProfile.addEventListener("click", () => popupAvatar.open());
+[
+  popupAvatar,
+  popupProfile,
+  popupAddCard,
+  popupCardImageViewer,
+  popupConfirmDeleteCard,
+].forEach((popup) => popup.setEventListeners());
 
-renderLoading(true);
+profileEditButton.addEventListener("click", () => {
+  popupProfile.setInputValues(userInfo.getUserInfo());
+  // <-- в этой строке нужно запустить и предварительно написать метод resetValidation() в классе валидации
+  // в нем будет вызываться метод по смене статуса кнопки сабмита _toggleButtonState
+  // также нужно пройтись по всем инпутам и очистить показанные ошибки (перед открытием попапа)
+  popupProfile.open();
+});
+
+cardAddButton.addEventListener("click", () => {
+  // <-- в этой строке нужно запустить и предварительно написать метод resetValidation() в классе валидации
+  popupAddCard.open();
+});
+
+avatarProfile.addEventListener("click", () => {
+  // <-- в этой строке нужно запустить и предварительно написать метод resetValidation() в классе валидации
+  popupAvatar.open();
+});
+
+renderLoading();
 Promise.all([api.getCards(), api.getUserInfo()])
   .then(([cards, userData]) => {
     userInfo.setUserInfo(userData);
-
-    const cardList = new Section(
-      {
-        renderer: (item) => {
-          const card = new Card(
-            {
-              data: item,
-              handleOpenCardImage,
-              handleUpdateCardLikesCount,
-              handleOpenConfirmDeleteCard,
-            },
-            cardConfig
-          );
-          cardList.addItem(card.generate());
-        },
-      },
-      cardConfig.containerSelector
-    );
     cardList.render("list", cards);
   })
   .catch((err) => console.log(err))

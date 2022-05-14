@@ -1,73 +1,30 @@
-import Popup from "./Popup";
-import { validationConfig } from "../utils/constants";
-import {
-  getAllElementsBySelector,
-  removeClassFromListElements,
-} from "../utils/utils";
+import PopupWithConfirm from "./PopupWithConfirm";
 
-export default class PopupWithForm extends Popup {
-  constructor({ handleFormSubmit, toogleSubmitButtonState }, config) {
-    super(config.popupSelector);
-    this._config = config;
-    this._handleFormSubmit = handleFormSubmit;
-    this._toogleSubmitButtonState = toogleSubmitButtonState;
-    this._submitElement = this._popupElement.querySelector(".form__button");
+export default class PopupWithForm extends PopupWithConfirm {
+  constructor({ handleFormSubmit }, config) {
+    super({ handleFormSubmit }, config);
+
     this._formElement = this._popupElement.querySelector(".form");
+    this._inputList = Array.from(
+      this._popupElement.querySelectorAll(".form__input")
+    );
   }
 
-  _getInputElements() {
-    return getAllElementsBySelector(this._popupElement, ".form__input");
-  }
-
-  _getInputValues() {
-    return this._getInputElements().reduce((acc, item) => {
-      const inputName = item.name;
-      const inputValue = item.value;
-      acc[inputName] = inputValue;
+  getInputValues() {
+    return this._inputList.reduce((acc, input) => {
+      acc[input.name] = input.value;
       return acc;
     }, {});
   }
 
-  _resetForm() {
-    this._formElement.reset();
-  }
-
-  _clearInputErrors() {
-    const errors = getAllElementsBySelector(
-      this._formElement,
-      validationConfig.errorSelector
-    );
-    const invalidInputs = getAllElementsBySelector(
-      this._formElement,
-      validationConfig.inputInvalidSelector
-    );
-    removeClassFromListElements(errors, validationConfig.errorClass);
-    removeClassFromListElements(
-      invalidInputs,
-      validationConfig.inputInvalidClass
-    );
-  }
-
-  _setEventListeners() {
-    this._submitElement.addEventListener(
-      "click",
-      (evt) => {
-        this._handleFormSubmit(evt, this._submitElement);
-      },
-      { once: true }
-    );
-
-    super._setEventListeners();
-  }
-
-  open() {
-    this._toogleSubmitButtonState();
-    super.open();
+  setInputValues(data) {
+    this._inputList.forEach((input) => {
+      input.value = data[input.name];
+    });
   }
 
   close() {
-    this._resetForm();
-    this._clearInputErrors();
+    this._formElement.reset();
     super.close();
   }
 }
