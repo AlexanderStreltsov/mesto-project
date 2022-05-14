@@ -11,10 +11,8 @@ export default class PopupWithForm extends PopupWithConfirm {
   }
 
   getInputValues() {
-    return this._inputList.reduce((acc, item) => {
-      const inputName = item.name;
-      const inputValue = item.value;
-      acc[inputName] = inputValue;
+    return this._inputList.reduce((acc, input) => {
+      acc[input.name] = input.value;
       return acc;
     }, {});
   }

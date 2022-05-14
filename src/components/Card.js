@@ -19,6 +19,7 @@ export default class Card {
     this._handleCardClick = handleOpenCardImage;
     this._handleLikeClick = handleUpdateCardLikesCount;
     this._handleDeleteIconClick = handleOpenConfirmDeleteCard;
+    this._profileId = sessionStorage.getItem(profileIdKey);
   }
 
   _setElements() {
@@ -95,10 +96,8 @@ export default class Card {
     this._nameElement.textContent = this._name;
     this._likeCountElement.textContent = this._likes.length;
 
-    this._profileId = sessionStorage.getItem(profileIdKey);
     this._setLikeButtonActive();
     this._setDeleteButtonVisible();
-
     this._setEventListeners();
 
     return this._element;
