@@ -6,11 +6,10 @@ import {
 } from "../utils/utils";
 
 export default class PopupWithForm extends Popup {
-  constructor({ handleFormSubmit, toogleSubmitButtonState }, config) {
+  constructor({ handleFormSubmit }, config) {
     super(config.popupSelector);
     this._config = config;
     this._handleFormSubmit = handleFormSubmit;
-    this._toogleSubmitButtonState = toogleSubmitButtonState;
     this._submitElement = this._popupElement.querySelector(".form__button");
     this._formElement = this._popupElement.querySelector(".form");
   }
@@ -32,22 +31,6 @@ export default class PopupWithForm extends Popup {
     this._formElement.reset();
   }
 
-  _clearInputErrors() {
-    const errors = getAllElementsBySelector(
-      this._formElement,
-      validationConfig.errorSelector
-    );
-    const invalidInputs = getAllElementsBySelector(
-      this._formElement,
-      validationConfig.inputInvalidSelector
-    );
-    removeClassFromListElements(errors, validationConfig.errorClass);
-    removeClassFromListElements(
-      invalidInputs,
-      validationConfig.inputInvalidClass
-    );
-  }
-
   _setEventListeners() {
     this._submitElement.addEventListener(
       "click",
@@ -61,13 +44,11 @@ export default class PopupWithForm extends Popup {
   }
 
   open() {
-    this._toogleSubmitButtonState();
     super.open();
   }
 
   close() {
     this._resetForm();
-    this._clearInputErrors();
     super.close();
   }
 }

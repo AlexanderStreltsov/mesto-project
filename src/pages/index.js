@@ -88,7 +88,7 @@ const handleConfirmDeleteCardFormSubmit = (evt) => {
   changeButtonContent(confirmDeleteButton, "Удаление...");
 
   const cardId = sessionStorage.getItem(cardIdKey);
-  console.log(cardId)
+  console.log(cardId);
   api
     .deleteCard(cardId)
     .then(() => {
@@ -151,21 +151,6 @@ const handleOpenCardImage = (name, link) => {
   popupWithImage.open(name, link);
 };
 
-const checkCardSubmitButtonState = () => {
-  cardAddFormValidator.toogleButtonState();
-};
-
-const checkAvatarSubmitButtonState = () => {
-  avatarEditFromValidator.toogleButtonState();
-};
-
-const checkProfileSubmitButtonState = () => {
-  const userData = userInfo.getUserInfo();
-  profileNameInput.value = userData.name;
-  profileJobInput.value = userData.info;
-  profileEditFormValidator.toogleButtonState();
-};
-
 function renderLoading(isLoading) {
   if (isLoading) {
     spinner.classList.add("spinner_visible");
@@ -208,7 +193,6 @@ const popupWithConfirm = new PopupWithConfirm(
 const popupAddCard = new PopupWithForm(
   {
     handleFormSubmit: handleCardFormSubmit,
-    toogleSubmitButtonState: checkCardSubmitButtonState,
   },
   popupAddCardConfig
 );
@@ -216,7 +200,6 @@ const popupAddCard = new PopupWithForm(
 const popupAvatar = new PopupWithForm(
   {
     handleFormSubmit: handleAvatarFormSubmit,
-    toogleSubmitButtonState: checkAvatarSubmitButtonState,
   },
   popupAvatarConfig
 );
@@ -224,14 +207,27 @@ const popupAvatar = new PopupWithForm(
 const popupProfile = new PopupWithForm(
   {
     handleFormSubmit: handleProfileFormSubmit,
-    toogleSubmitButtonState: checkProfileSubmitButtonState,
   },
   popupProfileConfig
 );
 
-profileEditButton.addEventListener("click", () => popupProfile.open());
-cardAddButton.addEventListener("click", () => popupAddCard.open());
-avatarProfile.addEventListener("click", () => popupAvatar.open());
+profileEditButton.addEventListener("click", () => {
+  profileEditFormValidator.resetValidation();
+  const userData = userInfo.getUserInfo();
+  profileNameInput.value = userData.name;
+  profileJobInput.value = userData.info;
+  popupProfile.open();
+});
+
+cardAddButton.addEventListener("click", () => {
+  cardAddFormValidator.resetValidation();
+  popupAddCard.open();
+});
+
+avatarProfile.addEventListener("click", () => {
+  avatarEditFromValidator.resetValidation();
+  popupAvatar.open();
+});
 
 renderLoading(true);
 Promise.all([api.getCards(), api.getUserInfo()])
