@@ -1,10 +1,10 @@
 import { profileIdKey } from "../utils/constants";
 
 export default class UserInfo {
-  constructor(userSelectors) {
-    this._profileName = userSelectors.name;
-    this._profileJob = userSelectors.info;
-    this._profileAvatar = userSelectors.avatar;
+  constructor(elements) {
+    this._profileName = elements.name;
+    this._profileJob = elements.info;
+    this._profileAvatar = elements.avatar;
   }
 
   setUserInfo(data) {

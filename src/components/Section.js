@@ -4,10 +4,10 @@ export default class Section {
     this._container = document.querySelector(containerSelector);
   }
 
-  addItem(element, order = "after") {
-    order === "after"
-      ? this._container.append(element)
-      : this._container.prepend(element);
+  addItem(element, order = "before") {
+    order === "before"
+      ? this._container.prepend(element)
+      : this._container.append(element);
   }
 
   render(type, data) {

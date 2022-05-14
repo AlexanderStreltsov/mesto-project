@@ -1,11 +1,11 @@
 import "./index.css";
+import Api from "../components/Api";
 import UserInfo from "../components/UserInfo";
-import FormValidator from "../components/FormValidator";
 import Card from "../components/Card";
 import Section from "../components/Section";
+import FormValidator from "../components/FormValidator";
 import PopupWithForm from "../components/PopupWithForm";
 import PopupWithImage from "../components/PopupWithImage";
-import Api from "../components/Api";
 import PopupWithConfirm from "../components/PopupWithConfirm";
 import {
   apiConfig,
@@ -19,9 +19,6 @@ import {
   avatarProfile,
   currentName,
   currentJob,
-  cardForm,
-  avatarForm,
-  profileForm,
   profileEditButton,
   cardAddButton,
   spinner,
@@ -58,7 +55,7 @@ const handleCardFormSubmit = () => {
   api
     .addCard(popupAddCard.getInputValues())
     .then((serverCard) => {
-      cardElement.render("element", serverCard);
+      cardElements.render("element", serverCard);
       popupAddCard.close();
     })
     .catch((err) => console.log(err))
@@ -110,7 +107,7 @@ const handleOpenCardImage = (name, link) => {
   popupCardImageViewer.open(name, link);
 };
 
-function renderLoading(isLoading = true) {
+const renderLoading = (isLoading = true) => {
   if (isLoading) {
     spinner.classList.add("spinner_visible");
     content.classList.add("content_hidden");
@@ -118,22 +115,17 @@ function renderLoading(isLoading = true) {
     spinner.classList.remove("spinner_visible");
     content.classList.remove("content_hidden");
   }
-}
+};
 
 const api = new Api(apiConfig);
 
-// сможешь здесь передавать конфигурацию с селекторами -
-// эту конфигурацию нужно определять в константах по аналогии с cardConfig или apiConfig
-// назвать к примеру userConfig
-// а элементы внутри класса искать в конструкторе класса по этим селекторам
-// будет типа = new UserInfo(userConfig)
 const userInfo = new UserInfo({
   name: currentName,
   info: currentJob,
   avatar: avatarProfile,
 });
 
-const cardElement = new Section(
+const cardElements = new Section(
   {
     renderer: (item) => {
       const card = new Card(
@@ -145,41 +137,23 @@ const cardElement = new Section(
         },
         cardConfig
       );
-      cardElement.addItem(card.generate(), "before");
+      cardElements.addItem(card.generate());
     },
   },
   cardConfig.containerSelector
 );
 
-const cardList = new Section(
-  {
-    renderer: (item) => {
-      const card = new Card(
-        {
-          data: item,
-          handleOpenCardImage,
-          handleUpdateCardLikesCount,
-          handleOpenConfirmDeleteCard,
-        },
-        cardConfig
-      );
-      cardList.addItem(card.generate());
-    },
-  },
-  cardConfig.containerSelector
-);
-
-const profileEditFormValidator = new FormValidator(
-  validationConfig,
-  profileForm
-);
-profileEditFormValidator.enableValidation();
-
-const cardAddFormValidator = new FormValidator(validationConfig, cardForm);
-cardAddFormValidator.enableValidation();
-
-const avatarEditFromValidator = new FormValidator(validationConfig, avatarForm);
-avatarEditFromValidator.enableValidation();
+const formValidators = {};
+const enableValidation = (config) => {
+  const formList = Array.from(document.querySelectorAll(config.formSelector));
+  formList.forEach((formElement) => {
+    const validator = new FormValidator(config, formElement);
+    const formName = formElement.getAttribute("name");
+    formValidators[formName] = validator;
+    validator.enableValidation();
+  });
+};
+enableValidation(validationConfig);
 
 const popupAvatar = new PopupWithForm(
   { handleFormSubmit: handleAvatarFormSubmit },
@@ -209,17 +183,17 @@ const popupCardImageViewer = new PopupWithImage(popupWithImageConfig);
 
 profileEditButton.addEventListener("click", () => {
   popupProfile.setInputValues(userInfo.getUserInfo());
-  profileEditFormValidator.resetValidation();
+  formValidators["edit-profile"].resetValidation();
   popupProfile.open();
 });
 
 cardAddButton.addEventListener("click", () => {
-  cardAddFormValidator.resetValidation();
+  formValidators["add-cards"].resetValidation();
   popupAddCard.open();
 });
 
 avatarProfile.addEventListener("click", () => {
-  avatarEditFromValidator.resetValidation();
+  formValidators["edit-avatar"].resetValidation();
   popupAvatar.open();
 });
 
@@ -227,7 +201,7 @@ renderLoading();
 Promise.all([api.getCards(), api.getUserInfo()])
   .then(([cards, userData]) => {
     userInfo.setUserInfo(userData);
-    cardList.render("list", cards);
+    cardElements.render("list", cards.reverse());
   })
   .catch((err) => console.log(err))
   .finally(() => renderLoading(false));

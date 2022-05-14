@@ -58,24 +58,12 @@ const popupConfirmDeleteConfig = {
 const profileIdKey = "data-profile-id";
 const cardIdKey = "data-card-id";
 
+const avatarProfile = document.querySelector(".profile__avatar");
 const currentName = document.querySelector(".profile__title");
 const currentJob = document.querySelector(".profile__subtitle");
 const profileEditButton = document.querySelector(".profile__edit-button");
-const profilePopup = document.querySelector("#edit-popup");
-const profileForm = profilePopup.querySelector(".form");
-const profileNameInput = profilePopup.querySelector("#title");
-const profileJobInput = profilePopup.querySelector("#job");
 
 const cardAddButton = document.querySelector(".profile__add-button");
-const popupAddCard = document.querySelector("#add-popup");
-const cardForm = popupAddCard.querySelector(".form");
-
-const avatarProfile = document.querySelector(".profile__avatar");
-const avatarPopup = document.querySelector("#edit-avatar-popup");
-const avatarForm = avatarPopup.querySelector(".form");
-
-const confirmDeletePopup = document.querySelector("#confirm-action");
-const confirmDeleteButton = confirmDeletePopup.querySelector(".form__button");
 
 const spinner = document.querySelector(".spinner");
 const content = document.querySelector(".content");
@@ -92,14 +80,8 @@ export {
   avatarProfile,
   currentName,
   currentJob,
-  cardForm,
-  avatarForm,
-  profileForm,
-  profileNameInput,
-  profileJobInput,
   profileEditButton,
   cardAddButton,
-  confirmDeleteButton,
   spinner,
   content,
   cardIdKey,
