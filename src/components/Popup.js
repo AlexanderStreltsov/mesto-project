@@ -20,7 +20,7 @@ export default class Popup {
   };
 
   setEventListeners() {
-    document.addEventListener("mousedown", this._handlePopupClick);
+    this._popupElement.addEventListener("mousedown", this._handlePopupClick);
   }
 
   open() {
