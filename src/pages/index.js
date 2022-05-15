@@ -6,7 +6,6 @@ import Section from "../components/Section";
 import FormValidator from "../components/FormValidator";
 import PopupWithForm from "../components/PopupWithForm";
 import PopupWithImage from "../components/PopupWithImage";
-import PopupWithConfirm from "../components/PopupWithConfirm";
 import {
   apiConfig,
   cardConfig,
@@ -35,7 +34,7 @@ const handleProfileFormSubmit = () => {
       popupProfile.close();
     })
     .catch((err) => console.log(err))
-    .finally(() => popupProfile.renderLoading(false, "Сохранить"));
+    .finally(() => popupProfile.renderLoading(false));
 };
 
 const handleAvatarFormSubmit = () => {
@@ -47,7 +46,7 @@ const handleAvatarFormSubmit = () => {
       popupAvatar.close();
     })
     .catch((err) => console.log(err))
-    .finally(() => popupAvatar.renderLoading(false, "Сохранить"));
+    .finally(() => popupAvatar.renderLoading(false));
 };
 
 const handleCardFormSubmit = () => {
@@ -77,7 +76,7 @@ const handleConfirmDeleteCardFormSubmit = () => {
       popupConfirmDeleteCard.close();
     })
     .catch((err) => console.log(err))
-    .finally(() => popupConfirmDeleteCard.renderLoading(false));
+    .finally(() => popupConfirmDeleteCard.renderLoading(false, "Да"));
 };
 
 const handleOpenConfirmDeleteCard = (cardId) => {
@@ -167,7 +166,7 @@ const popupAddCard = new PopupWithForm(
   { handleFormSubmit: handleCardFormSubmit },
   popupAddCardConfig
 );
-const popupConfirmDeleteCard = new PopupWithConfirm(
+const popupConfirmDeleteCard = new PopupWithForm(
   { handleFormSubmit: handleConfirmDeleteCardFormSubmit },
   popupConfirmDeleteConfig
 );
