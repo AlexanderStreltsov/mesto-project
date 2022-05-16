@@ -41,14 +41,14 @@
       <div class="popup__container">
         <h2 class="popup__heading">Редактировать профиль</h2>
         <button type="button" class="popup__close-button"></button>
-        <form class="form" name="edit-form" novalidate>
+        <form class="form" name="edit-profile" novalidate>
           <fieldset class="form__input-block">
             <label class="form__input-container">
               <input
                 type="text"
                 id="title"
                 class="form__input"
-                name="title"
+                name="name"
                 minlength="2"
                 maxlength="40"
                 autocomplete="off"
@@ -62,7 +62,7 @@
                 type="text"
                 id="job"
                 class="form__input"
-                name="job"
+                name="about"
                 minlength="2"
                 maxlength="200"
                 autocomplete="off"
@@ -89,7 +89,7 @@
                 type="text"
                 id="name-card"
                 class="form__input"
-                name="name-card"
+                name="name"
                 minlength="2"
                 maxlength="30"
                 autocomplete="off"
@@ -106,7 +106,7 @@
                 type="url"
                 id="link-img-card"
                 class="form__input"
-                name="link-img-card"
+                name="link"
                 pattern="[Hh][Tt][Tt][Pp][Ss]?:\/\/(?:(?:[a-zA-Z\u00a1-\uffff0-9]+-?)*[a-zA-Z\u00a1-\uffff0-9]+)(?:\.(?:[a-zA-Z\u00a1-\uffff0-9]+-?)*[a-zA-Z\u00a1-\uffff0-9]+)*(?:\.(?:[a-zA-Z\u00a1-\uffff]{2,}))(?::\d{2,5})?(?:\/[^\s]*)?"
                 autocomplete="off"
                 required
@@ -148,7 +148,7 @@
                 type="url"
                 id="url-avatar"
                 class="form__input"
-                name="url-avatar"
+                name="avatar"
                 pattern="[Hh][Tt][Tt][Pp][Ss]?:\/\/(?:(?:[a-zA-Z\u00a1-\uffff0-9]+-?)*[a-zA-Z\u00a1-\uffff0-9]+)(?:\.(?:[a-zA-Z\u00a1-\uffff0-9]+-?)*[a-zA-Z\u00a1-\uffff0-9]+)*(?:\.(?:[a-zA-Z\u00a1-\uffff]{2,}))(?::\d{2,5})?(?:\/[^\s]*)?"
                 autocomplete="off"
                 required
